@@ -10,7 +10,7 @@ from collections import Counter
 from util import wordext
 from util import localfile
 
-from git import *
+from model.git import *
 from model.fetch_raw_diff import *
 
 text_sim_type = 'lsi'
