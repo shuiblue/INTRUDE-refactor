@@ -10,8 +10,10 @@ from collections import Counter
 from util import wordext
 from util import localfile
 
+
 from model.git import *
 from model.fetch_raw_diff import *
+from nlp.nlp import  *
 
 text_sim_type = 'lsi'
 # text_sim_type = 'tfidf'
@@ -168,7 +170,7 @@ def location_similarity(la, lb):
 
 # ---------------------------------------------------------------------------
 
-import nlp
+from  nlp.nlp import *
 model = None
 def init_model_from_raw_docs(documents, save_id=None):
     global model

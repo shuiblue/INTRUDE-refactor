@@ -14,7 +14,7 @@ except ImportError:
 
 # _tokens = getattr(settings, "SCRAPER_GITHUB_API_TOKENS", [])
 
-with open('./data/token.txt', 'r') as file:
+with open("../data/token.txt", 'r') as file:
     _tokens = [line.rstrip('\n') for line in file]
 
 logger = logging.getLogger('ghd.scraper')

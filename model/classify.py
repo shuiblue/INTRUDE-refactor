@@ -40,7 +40,7 @@ from os import path
 
 default_model = 'boost'  # default model: AdaBoost
 
-data_folder = 'data/clf'
+data_folder = '../data/clf'
 
 dataset = [
     [data_folder + '/first_msr_pairs.txt', 1, 'train'],
@@ -162,7 +162,7 @@ def get_feature_vector(data, label, renew=False, out=None):
 
     if os.path.exists(X_path) and os.path.exists(y_path) and (not renew):
         print('warning: feature vector already exists!', out)
-        X = localfile.get_file(X_path)
+        X = locafile.get_file(X_path)
         y = localfile.get_file(y_path)
         return X, y
 

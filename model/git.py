@@ -6,7 +6,7 @@ import requests
 import platform
 from datetime import datetime
 import pathlib
-import fetch_raw_diff
+from model.fetch_raw_diff import *
 import init
 import util.timeUtil
 # from flask import Flask
@@ -19,7 +19,7 @@ import logging
 import json
 
 logger = logging.getLogger('INTRUDE.scraper')
-nonCodeFileExtensionList = [line.rstrip('\n') for line in open('./data/NonCodeFile.txt')]
+nonCodeFileExtensionList = [line.rstrip('\n') for line in open('../data/NonCodeFile.txt')]
 # app = Flask(__name__)
 
 # app.config['GITHUB_CLIENT_ID'] = os.environ.get('GITHUB_CLIENT_ID')

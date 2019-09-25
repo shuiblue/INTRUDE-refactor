@@ -11,7 +11,6 @@ from . import language_tool
 
 stemmer = PorterStemmer()
 lemmatizer = WordNetLemmatizer()
-nonCodeFileExtensionList = [line.rstrip('\n') for line in open('./data/NonCodeFile.txt')]
 
 def camel_case_split(identifier):
     matches = re.finditer('.+?(?:(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|$)', identifier)
