@@ -1,13 +1,14 @@
 from gensim import corpora, models, similarities, matutils
 import init
 
-model_path = init.LOCAL_DATA_PATH + '/model/'
+# model_path = init.LOCAL_DATA_PATH + '/model/'
+model_path = init.model_dir
 lsi_topic_num = 500
 
 
 class Model:
-    def __init__(self, texts, save_id = None):
-        if save_id is not None:
+    def __init__(self, texts, save_id = None,renew = False):
+        if save_id is not None and (not renew):
             try:
                 self.dictionary = corpora.Dictionary.load(model_path + '%s.dictionary' % save_id)
                 self.tfidf = models.TfidfModel.load(model_path + '%s.tfidf' % save_id)

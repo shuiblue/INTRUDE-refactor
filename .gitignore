@@ -1,0 +1,6 @@
+.env/
+/data
+/NLPmodel
+/venv
+.pyc
+.idea

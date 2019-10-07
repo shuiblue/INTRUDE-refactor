@@ -796,10 +796,10 @@ hashicorp/terraform 10537 8407
 hashicorp/terraform 2630 2571
 hashicorp/terraform 14514 13852
 hashicorp/terraform 4979 4662
-joomla/joomla-cms 4896 3602
+joomla/joomla-cms 9622 6796
 joomla/joomla-cms 13417 12588
 joomla/joomla-cms 1140 1122
-joomla/joomla-cms 9622 6796
+joomla/joomla-cms 4896 3602
 joomla/joomla-cms 3114 3088
 joomla/joomla-cms 15987 15704
 joomla/joomla-cms 5293 3602
@@ -1152,4 +1152,3 @@ rails/rails 23155 23155
 rails/rails 8064 8064
 rails/rails 9189 9189
 rails/rails 13029 13029
-

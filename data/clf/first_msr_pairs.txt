@@ -892,10 +892,10 @@ symfony/symfony 9199 8940
 symfony/symfony 16177 16100
 symfony/symfony 3378 3057
 symfony/symfony 20545 18726
+symfony/symfony-docs 8014 8009
 symfony/symfony-docs 5605 5188
 symfony/symfony-docs 7565 6393
 symfony/symfony-docs 7090 6927
-symfony/symfony-docs 8014 8009
 symfony/symfony-docs 6123 6121
 symfony/symfony-docs 4558 4533
 symfony/symfony-docs 4071 4068
