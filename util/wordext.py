@@ -112,6 +112,19 @@ def token_filtering(tokens, file=None):
     tokens = list(filter(lambda x: x not in language_tool.general_stopwords, newtokens))
     return tokens
 
+def filteringText(text,outfile_prefix):
+    # handle url
+    url_regex = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]| [! * \(\),] | (?: %[0-9a-fA-F][0-9a-fA-F]))+'
+    url_list = re.findall(url_regex, text)
+    fileIO.writeListToFile(url_list, outfile_prefix + "/url_list.tsv")
+    # remove url
+    text = re.sub(url_regex, ' ', text)
+
+    text = re.sub('\\\\u[0-9A-Fa-f]{4}', '', text)
+    text = re.sub('\\\\x[0-9A-Fa-f]{2}', '', text)
+    text = re.sub('\\\\[n|t]', ' ', text)
+    text = re.sub(r"[^0-9A-Za-z_./\\\-]", ' ', text)
+    return text
 
 def get_code_tokens_from_file(filelist_json, outfile_prefix, category=None, bigram_flag=True):
     data = {}
@@ -124,22 +137,15 @@ def get_code_tokens_from_file(filelist_json, outfile_prefix, category=None, bigr
             continue
         # print(file)
         # ignore file if the change is too big
-        if f_json['LOC']['add'] > 10000 or (f_json['LOC']['add'] < 5 and len(f_json['add_code']) > 10000):
+        # if f_json['LOC']['add'] > 10000 or (f_json['LOC']['add'] < 5 and len(f_json['add_code']) > 10000):
+        if (f_json['LOC']['add'] < 5 and len(f_json['add_code']) > 10000):
             print('code change in current file is too long, skip')
             continue
 
         text = f_json[category]
-        # handle url
-        url_regex = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]| [! * \(\),] | (?: %[0-9a-fA-F][0-9a-fA-F]))+'
-        url_list = re.findall(url_regex, text)
-        fileIO.writeListToFile(url_list, outfile_prefix + "/url_list.tsv")
-        # remove url
-        text = re.sub(url_regex, ' ', text)
 
-        text = re.sub('\\\\u[0-9A-Fa-f]{4}', '', text)
-        text = re.sub('\\\\x[0-9A-Fa-f]{2}', '', text)
-        text = re.sub('\\\\[n|t]', ' ', text)
-        text = re.sub(r"[^0-9A-Za-z_./\\\-]", ' ', text)
+        text = filteringText(text,outfile_prefix)
+
         tokens = nltk.word_tokenize(text)
 
         # generate an array of bigrams
@@ -180,13 +186,8 @@ def get_tokens_from_file(text, outfile_prefix, category=None, bigram_flag=True):
     """
     if (text is None):
         return []
-    # handle url
-    url_regex = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]| [! * \(\),] | (?: %[0-9a-fA-F][0-9a-fA-F]))+'
-    url_list = re.findall(url_regex, text)
-    fileIO.writeListToFile(url_list, outfile_prefix + "/url_list.tsv")
-    # remove url
-    text = re.sub(url_regex, '', text)
-    # text = re.sub(r"[^0-9A-Za-z_\\/\-.]|^[_\\/\-.]|(<!--.*?-->)", "", text)
+
+    text = filteringText(text, outfile_prefix)
     tokens = nltk.word_tokenize(text)
 
     # generate an array of bigrams

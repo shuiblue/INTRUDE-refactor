@@ -16,7 +16,6 @@ license
 .html
 .sch
 .ino
-.sh
 .dll
 .svn-base
 .bin

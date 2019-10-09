@@ -84,7 +84,7 @@ def preprocess_documents(repo, pulls,renew):
     for pull in tqdm(pulls):  # tqdm is used for print progress bar https://github.com/tqdm/tqdm/
 
         pr_id = pull['number']
-        # if pr_id != 54713:
+        # if pr_id != 14378:
         #     continue
         outfile_prefix = init.local_pr_data_dir + repo + "/" + str(pr_id)
         print(str(pr_id))
@@ -100,34 +100,30 @@ def preprocess_documents(repo, pulls,renew):
         #         #     break
 
         # ----------- title and description -----------
-        # wordext.get_tokens_from_file(pull['title'], outfile_prefix, 'title')
-        # if pull["body"]:
-        #     if not os.path.exists(outfile_prefix + "/body_tokens_stemmed.tsv")  or renew:
-        #         body_str = re.sub("(<.*?>)", "", pull['body'], flags=re.DOTALL)
-        #         wordext.get_tokens_from_file(body_str, outfile_prefix, 'body')
+        wordext.get_tokens_from_file(pull['title'], outfile_prefix, 'title')
+        if pull["body"]:
+            if not os.path.exists(outfile_prefix + "/body_tokens_stemmed.tsv")  or renew:
+                body_str = re.sub("(<.*?>)", "", pull['body'], flags=re.DOTALL)
+                wordext.get_tokens_from_file(body_str, outfile_prefix, 'body')
 
         # # ----------- commit msg  -----------
         print('check commit')
         all_commit_msg = concat_commits(get_pr_commit(repo, pr_id))
         wordext.get_tokens_from_file(all_commit_msg, outfile_prefix, 'commit')
         # # ----------- CODE & FILE  -----------
-        if not os.path.exists(outfile_prefix + '/toobig.txt') or renew:
-            print('check code ,file ')
-            pr_filelist_json = fetch_pr_code_info(repo, pr_id)
-            if (len(pr_filelist_json) == 0):
-                localfile.write_to_file(outfile_prefix + "/updateAt.txt",
-                                        str(datetime.datetime.now().strftime("%Y-%m-%d")))
-                continue
-            isLocTooBig = wordext.get_code_tokens_from_file(pr_filelist_json, outfile_prefix, 'add_code')
-            if not isLocTooBig == 'locTooBig':
-                wordext.get_code_tokens_from_file(pr_filelist_json, outfile_prefix, 'del_code')
+        print('check code ,file ')
+        pr_filelist_json = fetch_pr_code_info(repo, pr_id)
+        if (len(pr_filelist_json) == 0):
+            localfile.write_to_file(outfile_prefix + "/updateAt.txt",
+                                    str(datetime.datetime.now().strftime("%Y-%m-%d")))
+            continue
+        wordext.get_code_tokens_from_file(pr_filelist_json, outfile_prefix, 'add_code')
+        wordext.get_code_tokens_from_file(pr_filelist_json, outfile_prefix, 'del_code')
 
-            # ----------- Location  -----------
-            pr_filelist_json = fetch_pr_code_info(repo, pr_id)
-            if len(pr_filelist_json) > 0:
-                getCodeLocation(pr_filelist_json, outfile_prefix)
-        else:
-            print('file too big, skip')
+        # ----------- Location  -----------
+        pr_filelist_json = fetch_pr_code_info(repo, pr_id)
+        if len(pr_filelist_json) > 0:
+            getCodeLocation(pr_filelist_json, outfile_prefix)
         # ----------- version number  & crossReference  PR or ISSUE-----------
         print('check reference')
         body_text = '' if pull["body"] is None else pull["body"]

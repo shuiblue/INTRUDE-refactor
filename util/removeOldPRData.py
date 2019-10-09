@@ -53,6 +53,8 @@ import fnmatch
 
 def removeFile_byPattern_allrepo():
     # Get a list of all the file paths that ends with .txt from in specified directory
+    filenamelist = ['/toobig.txt','/added_code.json','/deleted_code.json']
+
     for rootDir, subdirs, filenames in os.walk(init.local_pr_data_dir):
         # Find the files that matches the given patterm
         for sd in subdirs:
@@ -60,13 +62,15 @@ def removeFile_byPattern_allrepo():
                 for sssubdir in ssubdirs:
                     for root, sub, subfile in os.walk(srootDir + '/' + sssubdir):
                         for subb in sub:
-                            if (os.path.exists(root +'/'+subb+ '/parse_diff.json')):
-                                print(root +'/'+subb+ '/parse_diff.json')
-                                try:
-                                    os.remove(root + '/' + subb + '/parse_diff.json')
-                                    break
-                                except OSError:
-                                    print("Error while deleting file")
+                            for filename in filenamelist:
+                                filepath = root + '/' + subb + filename
+                                if (os.path.exists(filepath)):
+                                    print(filepath)
+                                    try:
+                                        os.remove(filepath)
+                                        break
+                                    except OSError:
+                                        print("Error while deleting file")
 
 
 def removeFile_byPattern():
@@ -79,11 +83,12 @@ def removeFile_byPattern():
             for sd in subdirs:
                 for srootDir, ssubdirs, sfilenames in os.walk(init.local_pr_data_dir + train_repo + "/" + sd):
                     for filename in fnmatch.filter(sfilenames, 'toobig.txt'):
-                        with open (init.local_pr_data_dir + train_repo + "/" + sd + '/' + filename) as myfile:
+                        with open(init.local_pr_data_dir + train_repo + "/" + sd + '/' + filename) as myfile:
                             if 'loc' in myfile.read():
                                 print(init.local_pr_data_dir + train_repo + "/" + sd + '/' + filename)
                                 try:
-                                    os.remove(os.path.join(init.local_pr_data_dir + train_repo + "/" + sd + '/', filename))
+                                    os.remove(
+                                        os.path.join(init.local_pr_data_dir + train_repo + "/" + sd + '/', filename))
                                     break
                                 except OSError:
                                     print("Error while deleting file")

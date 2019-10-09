@@ -13,7 +13,7 @@ class Model:
                 self.dictionary = corpora.Dictionary.load(model_path + '%s.dictionary' % save_id)
                 self.tfidf = models.TfidfModel.load(model_path + '%s.tfidf' % save_id)
                 self.lsi = models.LsiModel.load(model_path + '%s_%s.lsi' % (save_id, lsi_topic_num))
-                print('model already exists!')
+                # print('model already exists!')
                 return
             except:
                 pass

@@ -68,3 +68,8 @@ null
 lib
 exec
 this
+string
+array
+nul
+
+

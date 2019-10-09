@@ -871,8 +871,8 @@ def fetch_pr_code_info(repo, pr_id, must_in_local=False):
         return file_list_cache[ind]
 
     path = LOCAL_DATA_PATH + '/pr_data/%s/%s' % (repo, pr_id)
-    if os.path.exists(path + '/toobig.txt'):
-        return []
+    # if os.path.exists(path + '/toobig.txt'):
+    #     return []
 
     raw_diff_path = path + '/raw_diff.json'
     pull_files_path = path + '/pull_files.json'
@@ -898,14 +898,14 @@ def fetch_pr_code_info(repo, pr_id, must_in_local=False):
 
 def filterNonCodeFiles(file_list, outfile_prefix):
     newFileList = []
-    count = 0
+    # count = 0
     for f in file_list:
-        if count > 50:
-            localfile.write_to_file(outfile_prefix + "/toobig.txt", '50file')
-            return []
+        # if count > 50:
+        #     localfile.write_to_file(outfile_prefix + "/toobig.txt", '50file')
+        #     return []
         if not language_tool.is_text(f['name']):
             newFileList.append(f)
-            count +=1
+            # count +=1
     return newFileList
 
 # -------------------About Repo--------------------------------------------------------
