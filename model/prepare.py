@@ -8,6 +8,7 @@ import itertools
 from tqdm import tqdm
 from random import sample
 import datetime
+import concurrent.futures
 
 part_params = None
 
@@ -25,35 +26,15 @@ if add_commit_message:
     feature_conf += '_commit_message'
 
 
-def process_PR(renew):
+def process_PR(repo):
+    renew = True
+    # for repo in init.trainModelRepoList:
+    print('Start analyzing repo: ', repo)
+    # prID_list = get_prID_list(repo, renew)
+    pr_list = get_pr_list(repo, renew)
 
-    for repo in init.trainModelRepoList:
-        print('Start analyzing repo: ', repo)
-        # prID_list = get_prID_list(repo, renew)
-        pr_list = get_pr_list(repo, renew)
-
-        print('number of PR pairs in dataset:', len(pr_list))
-        preprocess_documents(repo, pr_list,renew)
-
-
-# def getPRSetPerProject(data):
-#     print('Model Data Input=', data)
-#
-#     # run with all PR's info model
-#     PRset_per_repo = {}
-#     with open(data) as f:
-#         all_pr = f.readlines()
-#         pr_len = len(all_pr)
-#
-#     print(str(pr_len) + ' repos in the queue')
-#     for l in tqdm(all_pr):
-#         repo, pr1, pr2 = l.strip().split()
-#         # add pr pairs into map
-#         if repo not in PRset_per_repo:
-#             PRset_per_repo[repo] = []
-#         PRset_per_repo[repo].append(pr1)
-#         PRset_per_repo[repo].append(pr2)
-#     return PRset_per_repo
+    print('number of PR pairs in dataset:', len(pr_list))
+    preprocess_documents(repo, pr_list, renew)
 
 
 def get_pr_list(repo, renew):
@@ -80,7 +61,7 @@ def generatePaths(data, out):
     return X_path, y_path, out_file
 
 
-def preprocess_documents(repo, pulls,renew):
+def preprocess_documents(repo, pulls, renew):
     for pull in tqdm(pulls):  # tqdm is used for print progress bar https://github.com/tqdm/tqdm/
 
         pr_id = pull['number']
@@ -102,7 +83,7 @@ def preprocess_documents(repo, pulls,renew):
         # ----------- title and description -----------
         wordext.get_tokens_from_file(pull['title'], outfile_prefix, 'title')
         if pull["body"]:
-            if not os.path.exists(outfile_prefix + "/body_tokens_stemmed.tsv")  or renew:
+            if not os.path.exists(outfile_prefix + "/body_tokens_stemmed.tsv") or renew:
                 body_str = re.sub("(<.*?>)", "", pull['body'], flags=re.DOTALL)
                 wordext.get_tokens_from_file(body_str, outfile_prefix, 'body')
 
@@ -167,6 +148,15 @@ def getCodeLocation(filelist_json, outfile_prefix):
         json.dump(location_set, outfile)
 
 
-if __name__ == "__main__":
-    renew = True
-    process_PR(renew)
+
+# import a new API to create a thread pool
+from concurrent.futures import ThreadPoolExecutor as PoolExecutor
+
+repolist = init.trainModelRepoList
+# create a thread pool of 4 threads
+with PoolExecutor(max_workers=4) as executor:
+
+    # distribute the 1000 URLs among 4 threads in the pool
+    # _ is the body of each page that I'm ignoring right now
+    for _ in executor.map(process_PR, repolist):
+        pass

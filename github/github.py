@@ -898,14 +898,14 @@ def fetch_pr_code_info(repo, pr_id, must_in_local=False):
 
 def filterNonCodeFiles(file_list, outfile_prefix):
     newFileList = []
-    # count = 0
+    count = 0
     for f in file_list:
-        # if count > 50:
-        #     localfile.write_to_file(outfile_prefix + "/toobig.txt", '50file')
-        #     return []
+        if count > 500:
+            localfile.write_to_file(outfile_prefix + "/toobig.txt", '500file')
+            return []
         if not language_tool.is_text(f['name']):
             newFileList.append(f)
-            # count +=1
+            count +=1
     return newFileList
 
 # -------------------About Repo--------------------------------------------------------
@@ -939,6 +939,7 @@ def get_repo_PRlist(repo, type, renew):
 def get_repo_info_forPR(repo, type, renew):
     filtered_result = []
     api = GitHubAPI()
+    print(init.local_pr_data_dir + repo + '/pull_list.json')
     pullListfile = pathlib.Path(init.local_pr_data_dir + repo + '/pull_list.json')
     if pullListfile.exists():
         tocheck_pr = getOldOpenPRs(repo)

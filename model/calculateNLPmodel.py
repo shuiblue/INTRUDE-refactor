@@ -29,36 +29,37 @@ if bigram_flag == True:
     body_file_name = '/body_bigrams_tokens_stemmed.tsv'
     commitMSG_file_name = '/commit_bigrams_tokens_stemmed.tsv'
 
-def initNLPModel_per_repo(renew):
-    for repo in tqdm(init.trainModelRepoList):
-        print('init nlp model for repo: %s' % repo)
-        # -------- model for title & description & commit msg
-        global text_model
-        textMode_save_id = repo.replace('/', '_') + '_title_body_commitmsg'
-        try:
-            text_model = nlp.Model([], textMode_save_id, renew)
-            print('get text_model for repo: %s from local file' % repo)
-        except:
-            All_title_body_commitmsg_tokens = getAll_title_body_commitmsg_tokens(repo)
-            if len(All_title_body_commitmsg_tokens) > 0:
-                print('in total %s repos' % str(len(All_title_body_commitmsg_tokens)))
+def initNLPModel_per_repo(repo):
+    renew = True
+    # for repo in tqdm(init.trainModelRepoList):
+    print('init nlp model for repo: %s' % repo)
+    # -------- model for title & description & commit msg
+    global text_model
+    textMode_save_id = repo.replace('/', '_') + '_title_body_commitmsg'
+    try:
+        text_model = nlp.Model([], textMode_save_id, renew)
+        print('get text_model for repo: %s from local file' % repo)
+    except:
+        All_title_body_commitmsg_tokens = getAll_title_body_commitmsg_tokens(repo)
+        if len(All_title_body_commitmsg_tokens) > 0:
+            print('in total %s repos' % str(len(All_title_body_commitmsg_tokens)))
 
-                text_model = nlp.Model(All_title_body_commitmsg_tokens, textMode_save_id, renew)
-                print('done with text_model for repo: %s' % repo)
+            text_model = nlp.Model(All_title_body_commitmsg_tokens, textMode_save_id, renew)
+            print('done with text_model for repo: %s' % repo)
 
-        # -------- model for code
-        global code_model
-        codeMode_save_id = repo.replace('/', '_') + '_code'
+    # -------- model for code
+    global code_model
+    codeMode_save_id = repo.replace('/', '_') + '_code'
 
-        try:
-            code_model = nlp.Model([], codeMode_save_id, renew)
-            print('get code_model for repo: %s from local file' % repo)
-        except:
-            All_code_tokens = getAll_code_tokens(repo, bigram_flag)
-            if len(All_code_tokens) > 0:
-                print('in total %s repos' % str(len(All_code_tokens)))
-                code_model = nlp.Model(All_code_tokens, codeMode_save_id, renew)
-                print('done with code_model for repo: %s' % repo)
+    try:
+        code_model = nlp.Model([], codeMode_save_id, renew)
+        print('get code_model for repo: %s from local file' % repo)
+    except:
+        All_code_tokens = getAll_code_tokens(repo, bigram_flag)
+        if len(All_code_tokens) > 0:
+            print('in total %s repos' % str(len(All_code_tokens)))
+            code_model = nlp.Model(All_code_tokens, codeMode_save_id, renew)
+            print('done with code_model for repo: %s' % repo)
 
 
 def getAll_title_body_commitmsg_tokens(repo):
@@ -132,6 +133,18 @@ def getTextTokenInFile(filepath):
                 tokens.extend(t)
     return tokens
 
-if __name__ == "__main__":
-    renew = True
-    initNLPModel_per_repo(renew)
+# if __name__ == "__main__":
+#     renew = True
+#     initNLPModel_per_repo(renew)
+
+# import a new API to create a thread pool
+from concurrent.futures import ThreadPoolExecutor as PoolExecutor
+
+repolist = init.trainModelRepoList
+# create a thread pool of 4 threads
+with PoolExecutor(max_workers=4) as executor:
+
+    # distribute the 1000 URLs among 4 threads in the pool
+    # _ is the body of each page that I'm ignoring right now
+    for _ in executor.map(initNLPModel_per_repo, repolist):
+        pass
