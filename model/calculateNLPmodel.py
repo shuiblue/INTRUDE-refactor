@@ -142,7 +142,7 @@ from concurrent.futures import ThreadPoolExecutor as PoolExecutor
 
 repolist = init.trainModelRepoList
 # create a thread pool of 4 threads
-with PoolExecutor(max_workers=4) as executor:
+with PoolExecutor(max_workers=2) as executor:
 
     # distribute the 1000 URLs among 4 threads in the pool
     # _ is the body of each page that I'm ignoring right now
