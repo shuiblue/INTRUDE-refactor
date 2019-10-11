@@ -1,0 +1,8 @@
+cmd: python3 model/prepare.py
+deps:
+- path: model/prepare.py
+outs:
+- path: /DATA/luyao/pr_data/
+  cache: true
+  metric: false
+  persist: false
