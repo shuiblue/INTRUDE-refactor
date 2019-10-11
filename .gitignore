@@ -5,3 +5,4 @@
 .pyc
 .idea
 __pycache__/
+ github/__pycache__/

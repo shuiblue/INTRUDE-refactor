@@ -148,12 +148,15 @@ def getCodeLocation(filelist_json, outfile_prefix):
         json.dump(location_set, outfile)
 
 
+<<<<<<< HEAD
 # if __name__ == "__main__":
 #     repolist = init.trainModelRepoList
 #     # process_PR()
 #     # https://medium.com/@ageitgey/quick-tip-speed-up-your-python-data-processing-scripts-with-process-pools-cf275350163a
 #     with concurrent.futures.ProcessPoolExecutor() as executor:
 #         executor.map(process_PR, repolist)
+=======
+>>>>>>> 6db566131fb58418d6dba18f7db5f8e274b897eb
 
 # import a new API to create a thread pool
 from concurrent.futures import ThreadPoolExecutor as PoolExecutor
