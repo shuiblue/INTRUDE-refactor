@@ -3,7 +3,7 @@ import init
 
 # model_path = init.LOCAL_DATA_PATH + '/model/'
 model_path = init.model_dir
-lsi_topic_num = 500
+lsi_topic_num = 100
 
 
 class Model:
