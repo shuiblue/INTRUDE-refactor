@@ -1,0 +1,9 @@
+cmd: python3 model/calculateNLPmodel.py
+deps:
+- path: model/calculateNLPmodel.py
+- path: /DATA/luyao/pr_data/
+outs:
+- path: NLPmodel
+  cache: true
+  metric: false
+  persist: false
