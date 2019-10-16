@@ -163,46 +163,6 @@ def getFileCodeMap(repo, pr):
     return file_add_code_map, file_del_code_map
 
 
-#
-# def getCodeSim(repo, pr1_file_add_code_map, pr1_file_delete_code_map, pr2_file_add_code_map, pr2_file_delete_code_map):
-#     # def getCodeSim(repo, pr1, pr2):
-#     sim = {}
-#     overlap_addFiles = misc.intersection(list(pr1_file_add_code_map.keys()), list(pr2_file_add_code_map.keys()))
-#     overlap_deleteFiles = misc.intersection(list(pr1_file_delete_code_map.keys()),
-#                                             list(pr2_file_delete_code_map.keys()))
-#
-#     save_id = repo.replace('/', '_') + '_code'
-#     code_model = nlp.Model([], save_id)
-#
-#     pr1_addCode_tokens = getCodeTokens(pr1_file_add_code_map, None)
-#     pr1_deleteCode_tokens = getCodeTokens(pr1_file_delete_code_map, None)
-#     pr1_addCode_tokens_overlapFile = getCodeTokens(pr1_file_add_code_map, overlap_addFiles)
-#     pr1_deleteCode_tokens_overlapFile = getCodeTokens(pr1_file_delete_code_map, overlap_deleteFiles)
-#
-#     pr2_addCode_tokens = getCodeTokens(pr2_file_add_code_map, None)
-#     pr2_deleteCode_tokens = getCodeTokens(pr2_file_delete_code_map, None)
-#     pr2_addCode_tokens_overlapFile = getCodeTokens(pr2_file_add_code_map, overlap_addFiles)
-#     pr2_deleteCode_tokens_overlapFile = getCodeTokens(pr2_file_delete_code_map, overlap_deleteFiles)
-#
-#     if LSI_flag:
-#         sim['lsi_add'] = code_model.query_sim_lsi(pr1_addCode_tokens, pr2_addCode_tokens)
-#         sim['lsi_delete'] = code_model.query_sim_lsi(pr1_deleteCode_tokens, pr2_deleteCode_tokens)
-#
-#         sim['lsi_add_overlap'] = code_model.query_sim_lsi(pr1_addCode_tokens_overlapFile,
-#                                                           pr2_addCode_tokens_overlapFile)
-#         sim['lsi_delete_overlap'] = code_model.query_sim_lsi(pr1_deleteCode_tokens_overlapFile,
-#                                                              pr2_deleteCode_tokens_overlapFile)
-#     if TFIDF_flag:
-#         sim['tfidf_add'] = code_model.query_sim_tfidf(pr1_addCode_tokens, pr2_addCode_tokens)
-#         sim['tfidf_delete'] = code_model.query_sim_tfidf(pr1_deleteCode_tokens, pr2_deleteCode_tokens)
-#
-#         sim['tfidf_add_overlap'] = code_model.query_sim_tfidf(pr1_addCode_tokens_overlapFile,
-#                                                               pr2_addCode_tokens_overlapFile)
-#         sim['tfidf_delete_overlap'] = code_model.query_sim_tfidf(pr1_deleteCode_tokens_overlapFile,
-#                                                                  pr2_deleteCode_tokens_overlapFile)
-#
-#     return [sim['lsi_add'], sim['lsi_delete'], sim['lsi_add_overlap'], sim['lsi_delete_overlap'], sim['tfidf_add'],
-#             sim['tfidf_delete'], sim['tfidf_add_overlap'], sim['tfidf_delete_overlap']]
 
 def getCodeSim(repo, pr1_file_code_map, pr2_file_code_map, pr1_sameFileName_list, pr2_sameFileName_list,
                overlap_FilePath_List):
@@ -337,54 +297,55 @@ def getPRPairMapPerProject(data, label, renew=False, out=None):
     return PRpair_map_per_repo
 
 
-def getFeatureVectorForModeling(renew):
-    for data in dataset:
-        path = data[0]
-        # path = 'data/clf/second_msr_pairs.txt'
-        label = data[1]
-        group = data[2]
+def getFeatureVectorForModeling(data):
+    renew = True
+    # for data in dataset:
+    path = data[0]
+    # path = 'data/clf/second_msr_pairs.txt'
+    label = data[1]
+    group = data[2]
 
-        default_path = init.currentDIR + '/' + path.replace('.txt', '') + '_feature_vector'
-        X_path, y_path = default_path + '_X.json', default_path + '_y.json'
+    default_path = init.currentDIR + '/' + path.replace('.txt', '') + '_feature_vector'
+    X_path, y_path = default_path + '_X.json', default_path + '_y.json'
 
-        if os.path.exists(X_path) and os.path.exists(y_path) and (not renew):
-            print('feature vector already exists, read from local file')
-            X = localfile.get_file(X_path)
-            y = localfile.get_file(y_path)
-            return X, y
+    if os.path.exists(X_path) and os.path.exists(y_path) and (not renew):
+        print('feature vector already exists, read from local file')
+        X = localfile.get_file(X_path)
+        y = localfile.get_file(y_path)
+        return X, y
 
-        X, y = [], []
+    X, y = [], []
 
-        # run with all PR's info model
-        repo2PRpair_map = {}
-        with open(init.currentDIR + '/' + path) as f:
-            all_pr = f.readlines()
+    # run with all PR's info model
+    repo2PRpair_map = {}
+    with open(init.currentDIR + '/' + path) as f:
+        all_pr = f.readlines()
 
-        for l in tqdm(all_pr):
-            repo, n1, n2 = l.strip().split()
+    for l in tqdm(all_pr):
+        repo, n1, n2 = l.strip().split()
 
-            if repo not in repo2PRpair_map:
-                repo2PRpair_map[repo] = []
-            repo2PRpair_map[repo].append((n1, n2))
+        if repo not in repo2PRpair_map:
+            repo2PRpair_map[repo] = []
+        repo2PRpair_map[repo].append((n1, n2))
 
-        out_file = open(default_path + '_X_and_Y.txt', 'w+')
+    out_file = open(default_path + '_X_and_Y.txt', 'w+')
 
-        for repo in tqdm(repo2PRpair_map):
-            print('Start running on', repo)
-            # sequence
-            for pr_pair in tqdm(repo2PRpair_map[repo]):
-                print(repo, pr_pair[0], pr_pair[1])
-                featureVec = get_featureVector_ForPRpair(repo, pr_pair[0], pr_pair[1])
-                X.append(featureVec)
-                y.append(label)
-                print(repo, pr_pair[0], pr_pair[1], featureVec, label, file=out_file)
+    for repo in tqdm(repo2PRpair_map):
+        # print('Start running on', repo)
+        # sequence
+        for pr_pair in tqdm(repo2PRpair_map[repo]):
+            print(repo, pr_pair[0], pr_pair[1])
+            featureVec = get_featureVector_ForPRpair(repo, pr_pair[0], pr_pair[1])
+            X.append(featureVec)
+            y.append(label)
+            print(repo, pr_pair[0], pr_pair[1], featureVec, label, file=out_file)
 
-        out_file.close()
+    out_file.close()
 
-        # save to local
-        localfile.write_to_file(X_path, X)
-        localfile.write_to_file(y_path, y)
-        return (X, y)
+    # save to local
+    localfile.write_to_file(X_path, X)
+    localfile.write_to_file(y_path, y)
+    return (X, y)
 
 
 def getOverlapFiles(pr1_file_list, pr2_file_list):
@@ -563,6 +524,18 @@ def getTime(repo, pr):
     return timeStamp
 
 
-if __name__ == "__main__":
-    renew = True
-    getFeatureVectorForModeling(renew)
+# if __name__ == "__main__":
+#     renew = True
+#     getFeatureVectorForModeling(renew)
+
+# import a new API to create a thread pool
+from concurrent.futures import ThreadPoolExecutor as PoolExecutor
+
+
+# create a thread pool of 4 threads
+with PoolExecutor(max_workers=3) as executor:
+
+    # distribute the 1000 URLs among 4 threads in the pool
+    # _ is the body of each page that I'm ignoring right now
+    for _ in executor.map(getFeatureVectorForModeling, dataset):
+        pass
