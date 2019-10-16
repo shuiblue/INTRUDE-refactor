@@ -16,6 +16,7 @@ import os
 import json
 from util import localfile
 from util import misc
+from util import wordext
 from tqdm import tqdm
 from github import github
 from datetime import datetime
@@ -280,11 +281,11 @@ def get_text_sim(repo, pr1, pr2, type):
 def getTokens(repo, pr, type):
     dirPath = init.local_pr_data_dir + repo + '/' + pr
     if type == 'title':
-        return getTextTokenInFile(dirPath + title_file_name)
+        return wordext.getTextTokenInFile(dirPath + title_file_name)
     if type == 'body':
-        return getTextTokenInFile(dirPath + body_file_name)
+        return wordext.getTextTokenInFile(dirPath + body_file_name)
     if type == 'commit':
-        return getTextTokenInFile(dirPath + commitMSG_file_name)
+        return wordext.getTextTokenInFile(dirPath + commitMSG_file_name)
 
 
 def reference_similarity(A, B):

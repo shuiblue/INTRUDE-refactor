@@ -264,6 +264,14 @@ def get_top_words_from_text(text, top_number=10):
 def _removeNonAscii(s):
     return "".join(i for i in s if ord(i) < 128)
 
+def getTextTokenInFile(filepath):
+    tokens = []
+    if os.path.exists(filepath):
+        with open(filepath) as tsv:
+            tokens_perPR = [line.strip().split('\t') for line in tsv]
+            for t in tokens_perPR:
+                tokens.extend(t)
+    return tokens
 
 if __name__ == "__main__":
     s =   "VCINSTALLDIR_SERVO C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\BuildTools\\VC\\",

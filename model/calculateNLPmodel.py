@@ -15,6 +15,7 @@ from nlp import nlp
 import os
 import json
 from tqdm import tqdm
+from util import wordext
 
 bigram_flag = True
 dataset = init.dataset
@@ -76,12 +77,12 @@ def getAll_title_body_commitmsg_tokens(repo):
             # for sub_rootDir, sub_dirs, sub_filenames in os.walk(rootDir + "/" + subdir):
             doc = []
             if os.path.exists(dir + title_file_name):
-                doc.extend(getTextTokenInFile(dir + title_file_name))
+                doc.extend(wordext.getTextTokenInFile(dir + title_file_name))
             if os.path.exists(dir + body_file_name):
-                doc.extend(getTextTokenInFile(dir + body_file_name))
+                doc.extend(wordext.getTextTokenInFile(dir + body_file_name))
 
             if os.path.exists(dir + commitMSG_file_name):
-                doc.extend(getTextTokenInFile(dir + commitMSG_file_name))
+                doc.extend(wordext.getTextTokenInFile(dir + commitMSG_file_name))
             tokens.append(doc)
         break
     return tokens
@@ -124,14 +125,7 @@ def getAll_code_tokens(repo, bigram_flag):
     return tokens
 
 
-def getTextTokenInFile(filepath):
-    tokens = []
-    if os.path.exists(filepath):
-        with open(filepath) as tsv:
-            tokens_perPR = [line.strip().split('\t') for line in tsv]
-            for t in tokens_perPR:
-                tokens.extend(t)
-    return tokens
+
 
 # if __name__ == "__main__":
 #     renew = True
