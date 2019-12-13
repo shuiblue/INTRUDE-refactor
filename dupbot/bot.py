@@ -7,7 +7,6 @@ import util.timeUtil
 import datetime
 import schedule
 import time
-import detect
 from datetime import datetime, timedelta
 from threading import Timer
 import sys

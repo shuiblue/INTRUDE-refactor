@@ -26,15 +26,15 @@ else:
     # testing & training dataset
     data_folder = 'data/clf'
     dataset = [
-        [data_folder + '/first_msr_pairs.txt', 1, 'train'],
-        [data_folder + '/second_msr_pairs.txt', 1, 'test'],
+        # [data_folder + '/first_msr_pairs.txt', 1, 'train'],
+        # [data_folder + '/second_msr_pairs.txt', 1, 'test'],
         #     [data_folder + '/first_nondup.txt', 0, 'train'],
         #     [data_folder + '/second_nondup.txt', 0, 'test'], # model 0
         #     [data_folder + '/testSet_Model1.txt', 0, 'test'], #model 1
         #     [data_folder + '/testSet_Model2.txt', 0, 'test'],  #model 2
 
-        #### consequtive non dup pr pairs
-        # [data_folder + '/latest_NonDupPR_training.txt', 0, 'train'],
+        ### consequtive non dup pr pairs
+        [data_folder + '/latest_NonDupPR_training.txt', 0, 'train'],
         [data_folder + '/latest_NonDupPR_testing.txt', 0, 'test'],
     ]
     currentDIR = os.path.dirname(os.path.realpath(__file__))
