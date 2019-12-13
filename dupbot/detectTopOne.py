@@ -9,7 +9,6 @@ from github import git
 import os
 import os.path
 from sklearn.externals import joblib
-from tqdm import tqdm
 import init
 import util
 import model
@@ -78,7 +77,7 @@ def get_topK(repo, num1, topK=10, print_progress=False, use_way='new'):
     pull_v = {}
 
     # check if any flags are active & violated
-    for pull in tqdm(pulls):
+    for pull in pulls:
         feature_vector = {}
         cnt += 1
 
