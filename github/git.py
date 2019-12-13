@@ -11,6 +11,7 @@ import util.timeUtil
 from util import localfile
 from random import randint
 import logging
+import scraper
 import json
 
 logger = logging.getLogger('INTRUDE.scraper')
