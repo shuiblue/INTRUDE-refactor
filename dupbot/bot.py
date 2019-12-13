@@ -1,6 +1,6 @@
 # import nltk
 # nltk.download()
-from github import *
+from github import git
 import json
 import init
 import util.timeUtil
@@ -10,18 +10,20 @@ import time
 from datetime import datetime, timedelta
 from threading import Timer
 import sys
+import os
+from dupbot import detectTopOne
 
 # from tqdm import tqdm
 
-detect.speed_up = True
-detect.filter_larger_number = True
-detect.filter_out_too_old_pull_flag = True
-detect.filter_already_cite = False
-detect.filter_create_after_merge = True
-detect.filter_overlap_author = False
-detect.filter_out_too_big_pull_flag = False
-detect.filter_same_author_and_already_mentioned = True
-detect.filter_version_number_diff = True
+
+filter_larger_number = True
+filter_out_too_old_pull_flag = True
+filter_already_cite = False
+filter_create_after_merge = True
+filter_overlap_author = False
+filter_out_too_big_pull_flag = False
+filter_same_author_and_already_mentioned = True
+filter_version_number_diff = True
 
 add_flag = True
 today_str = ''
@@ -123,7 +125,7 @@ def work(repos):
                         continue
                     repo, pr_id, created_at = t.split()
                     cnt += 1
-                    dupPR_id, similarity, feature_vector = detect.detect_one(repo, pr_id)
+                    dupPR_id, similarity, feature_vector = detectTopOne.detect_one(repo, pr_id)
                     if (dupPR_id == -1 and similarity == -1 and feature_vector == -1): continue
                     with open(detection_result_file, 'a') as outf:
                         print(repo, str(pr_id), str(dupPR_id), "%.4f" % similarity)
