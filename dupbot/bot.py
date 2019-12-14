@@ -1,4 +1,4 @@
-import github
+
 import init
 import util.timeUtil
 import datetime
@@ -7,9 +7,8 @@ import time
 from datetime import datetime, timedelta
 import sys
 import os
-from dupbot import detectTopOne
 
-
+# from dupbot import detectTopOne
 
 filter_larger_number = True
 filter_out_too_old_pull_flag = True
@@ -63,7 +62,8 @@ def getCandidatePRs(repo):
         print('', end="", file=f)  #
 
     # get all pr
-    pull_list = github.github_api.get_repo_info_forPR(repo, 'pull', renew=True)  # get all info about all PRs, sort by ID
+    from github import github_api
+    pull_list = github_api.get_repo_info_forPR(repo, 'pull', renew=True)  # get all info about all PRs, sort by ID
     pull_list = sorted(pull_list, key=lambda x: int(x['number']), reverse=True)
     print("length : " + str(len(pull_list)))
 
@@ -120,6 +120,7 @@ def work(repos):
                         continue
                     repo, pr_id, created_at = t.split()
                     cnt += 1
+                    from dupbot import detectTopOne
                     dupPR_id, similarity, feature_vector = detectTopOne.detect_one(repo, pr_id)
                     if (dupPR_id == -1 and similarity == -1 and feature_vector == -1): continue
                     with open(detection_result_file, 'a') as outf:

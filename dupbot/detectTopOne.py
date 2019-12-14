@@ -5,9 +5,8 @@ from github import github_api
 from sklearn.externals import joblib
 import init
 import util
-import model
-
-
+from model import *
+from model import featurization, calculateNLPmodel
 
 print('load existing model')
 c = joblib.load(init.model_saved_path)
@@ -48,10 +47,10 @@ def have_commit_overlap(p1, p2):
 def get_topK(repo, num1, topK=10, print_progress=False, use_way='new'):
     now = datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
     global last_detect_repo
-    import model
+    # import model
     if last_detect_repo != repo:
         last_detect_repo = repo
-        model.calculateNLPmodel.initNLPModel_per_repo(repo)
+        calculateNLPmodel.initNLPModel_per_repo(repo)
         # init_model_with_repo(repo)
 
     pulls = github_api.get_repo_info_forPR(repo, 'pull', renew=False)
@@ -130,7 +129,7 @@ def get_topK(repo, num1, topK=10, print_progress=False, use_way='new'):
 
         if use_way == 'new':
             # feature_vector = get_pr_sim_vector(pullA, pull)
-            feature_vector =  model.featurization.get_featureVector_ForPRpair(repo, pullA, pull)
+            feature_vector = featurization.get_featureVector_ForPRpair(repo, pullA, pull)
             results_featureVector[pull["number"]] = feature_vector
             results[pull["number"]] = c.predict_proba([feature_vector])[0][1]
 
@@ -145,7 +144,7 @@ def get_topK(repo, num1, topK=10, print_progress=False, use_way='new'):
 
 
 def run_list(repo, renew=False, run_num=200, rerun=False):
-    model.init_model_with_repo(repo)
+    calculateNLPmodel.initNLPModel_per_repo(repo)
     pulls = github_api.get_repo_info_forPR(repo, 'pull', renew_pr_list_flag)
 
     all_p = set([str(pull["number"]) for pull in pulls])

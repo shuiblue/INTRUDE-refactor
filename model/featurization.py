@@ -11,14 +11,14 @@ Featurization: calculating similarity scores for each feature for PR1 & PR2
 
 
 import init
-from nlp import nlp
+from github import github_api
+# from nlp import nlp
 import os
 import json
 from util import localfile
 from util import misc
 from util import wordext
 from tqdm import tqdm
-from github import github
 from datetime import datetime
 
 bigram_flag = True
@@ -168,6 +168,7 @@ def getCodeSim(repo, pr1_file_code_map, pr2_file_code_map, pr1_sameFileName_list
                overlap_FilePath_List):
     sim = {}
     save_id = repo.replace('/', '_') + '_code'
+    from nlp import nlp
     code_model = nlp.Model([], save_id)
 
     ''' compare ALL code changes'''
@@ -230,6 +231,7 @@ def get_text_sim(repo, pr1, pr2, type):
     save_id = repo.replace('/', '_') + '_title_body_commitmsg'
 
     if LSI_flag:
+        from nlp import nlp
         text_model = nlp.Model([], save_id)
         sim['lsi'] = text_model.query_sim_lsi(pr1_token, pr2_token)
     if TFIDF_flag:
@@ -514,7 +516,7 @@ def getTime(repo, pr):
             with open(json_filepath) as jsonfile:
                 pulljson = json.load(jsonfile)
         else:
-            pulljson = github.get_pull(repo, pr)
+            pulljson = github_api.get_pull(repo, pr)
 
         timeStamp = pulljson['created_at']
 
