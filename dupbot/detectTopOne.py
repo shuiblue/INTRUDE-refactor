@@ -6,7 +6,7 @@ from sklearn.externals import joblib
 import init
 import util
 from model import *
-from model import featurization, calculateNLPmodel
+# from model import featurization, calculateNLPmodel
 
 print('load existing model')
 c = joblib.load(init.model_saved_path)
@@ -50,6 +50,7 @@ def get_topK(repo, num1, topK=10, print_progress=False, use_way='new'):
     # import model
     if last_detect_repo != repo:
         last_detect_repo = repo
+        from model import calculateNLPmodel
         calculateNLPmodel.initNLPModel_per_repo(repo)
         # init_model_with_repo(repo)
 
@@ -129,6 +130,7 @@ def get_topK(repo, num1, topK=10, print_progress=False, use_way='new'):
 
         if use_way == 'new':
             # feature_vector = get_pr_sim_vector(pullA, pull)
+            from model import featurization
             feature_vector = featurization.get_featureVector_ForPRpair(repo, pullA, pull)
             results_featureVector[pull["number"]] = feature_vector
             results[pull["number"]] = c.predict_proba([feature_vector])[0][1]
@@ -144,6 +146,7 @@ def get_topK(repo, num1, topK=10, print_progress=False, use_way='new'):
 
 
 def run_list(repo, renew=False, run_num=200, rerun=False):
+    from model import calculateNLPmodel
     calculateNLPmodel.initNLPModel_per_repo(repo)
     pulls = github_api.get_repo_info_forPR(repo, 'pull', renew_pr_list_flag)
 

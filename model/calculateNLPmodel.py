@@ -132,13 +132,15 @@ def getAll_code_tokens(repo, bigram_flag):
 #     initNLPModel_per_repo(renew)
 
 # import a new API to create a thread pool
-from concurrent.futures import ThreadPoolExecutor as PoolExecutor
 
-repolist = init.trainModelRepoList
-# create a thread pool of 4 threads
-with PoolExecutor(max_workers=2) as executor:
-
-    # distribute the 1000 URLs among 4 threads in the pool
-    # _ is the body of each page that I'm ignoring right now
-    for _ in executor.map(initNLPModel_per_repo, repolist):
-        pass
+# ###########3 for NLP MODELING STEP COMMENT OUT FOR BOT
+# from concurrent.futures import ThreadPoolExecutor as PoolExecutor
+#
+# repolist = init.trainModelRepoList
+# # create a thread pool of 4 threads
+# with PoolExecutor(max_workers=2) as executor:
+#
+#     # distribute the 1000 URLs among 4 threads in the pool
+#     # _ is the body of each page that I'm ignoring right now
+#     for _ in executor.map(initNLPModel_per_repo, repolist):
+#         pass
