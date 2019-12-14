@@ -4,6 +4,7 @@ from datetime import datetime
 import pathlib
 from github.fetch_raw_diff import *
 import init
+import github.github_api
 import util.timeUtil
 # from flask import Flask
 # from flask_github import GitHub
@@ -11,7 +12,7 @@ import util.timeUtil
 from util import localfile
 from random import randint
 import logging
-import scraper
+# import scraper
 import json
 
 logger = logging.getLogger('INTRUDE.scraper')
@@ -27,7 +28,7 @@ nonCodeFileExtensionList = [line.rstrip('\n') for line in open('../data/NonCodeF
 LOCAL_DATA_PATH = init.LOCAL_DATA_PATH
 
 # api = GitHub(app)
-api = scraper.GitHubAPI()
+api = github.github_api.GitHubAPI()
 
 #
 # # @api.access_token_getter
