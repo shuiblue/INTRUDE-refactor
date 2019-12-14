@@ -1,4 +1,4 @@
-from pandas.io.json import json
+import json
 
 from util import localfile
 import os.path
