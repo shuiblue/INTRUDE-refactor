@@ -5,14 +5,14 @@ from datetime import datetime, timedelta
 # from sklearn.utils import shuffle
 
 from github import git
+from github import github_api
 
 import os
 import os.path
 from sklearn.externals import joblib
 import init
 import util
-from model import calculateNLPmodel
-import model.calculateNLPmodel
+import model
 
 
 
@@ -57,10 +57,10 @@ def get_topK(repo, num1, topK=10, print_progress=False, use_way='new'):
     global last_detect_repo
     if last_detect_repo != repo:
         last_detect_repo = repo
-        model.initNLPModel_per_repo(repo)
+        model.calculateNLPmodel.initNLPModel_per_repo(repo)
         # init_model_with_repo(repo)
 
-    pulls = git.get_repo_info(repo, 'pull', renew=False)
+    pulls = github_api.get_repo_info_forPR(repo, 'pull', renew=False)
     print("get all " + str(len(pulls)) + "  prs for repo " + repo)
 
     print("get pr " + str(num1))
@@ -152,7 +152,7 @@ def get_topK(repo, num1, topK=10, print_progress=False, use_way='new'):
 
 def run_list(repo, renew=False, run_num=200, rerun=False):
     model.init_model_with_repo(repo)
-    pulls = git.get_repo_info(repo, 'pull', renew_pr_list_flag)
+    pulls = github_api.get_repo_info_forPR(repo, 'pull', renew_pr_list_flag)
 
     all_p = set([str(pull["number"]) for pull in pulls])
     select_p = all_p

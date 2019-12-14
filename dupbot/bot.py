@@ -1,19 +1,14 @@
-# import nltk
-# nltk.download()
-from github import git
-import json
+import github
 import init
 import util.timeUtil
 import datetime
 import schedule
 import time
 from datetime import datetime, timedelta
-from threading import Timer
 import sys
 import os
 from dupbot import detectTopOne
 
-# from tqdm import tqdm
 
 
 filter_larger_number = True
@@ -68,7 +63,7 @@ def getCandidatePRs(repo):
         print('', end="", file=f)  #
 
     # get all pr
-    pull_list = git.get_repo_info_forPR(repo, 'pull', renew=True)  # get all info about all PRs, sort by ID
+    pull_list = github.github_api.get_repo_info_forPR(repo, 'pull', renew=True)  # get all info about all PRs, sort by ID
     pull_list = sorted(pull_list, key=lambda x: int(x['number']), reverse=True)
     print("length : " + str(len(pull_list)))
 
@@ -164,7 +159,7 @@ def execute(repoList_file):
             repos.append(repo_str)
     print(str(len(repos)) + " repos")
 
-    exe_time = (datetime.now() + timedelta(minutes=5)).strftime("%H:%M")
+    exe_time = (datetime.now() + timedelta(minutes=1)).strftime("%H:%M")
     print(exe_time + " execute... ")
     schedule.every().day.at(exe_time).do(work, repos)
 
@@ -174,7 +169,8 @@ def execute(repoList_file):
 
 
 if __name__ == "__main__":
+    print("a")
     execute(sys.argv[1])
-    # execute("data/repo_PR_2.txt")
+    # execute("../data/repo_PR_4.txt")
     # repos = ['xilinliu/test-INTRUDE']
     # work(repos)
