@@ -1152,7 +1152,7 @@ def getOldOpenPRs(repo):
         data = json.load(json_file)
         if (len(data) > 0):
             latest_pr = data[0]['number']
-            print("latest_pr" + str(latest_pr))
+            print("latest_pr " + str(latest_pr))
             for pr in data:
                 number = pr['number']
                 state = pr['state']
@@ -1164,8 +1164,10 @@ def getOldOpenPRs(repo):
             if len(old_openPR_list) > 0:
                 minID = min(old_openPR_list)
                 if minID < latest_pr:
-                    print("min(old_openPR_list)" + str(min(old_openPR_list)))
-                    return min(old_openPR_list)
+                    print("min(old_openPR_list)" + str(minID))
+                    return minID
+                else:
+                    return latest_pr
             else:
                 print("latest_pr" + str(latest_pr))
                 return latest_pr

@@ -1,6 +1,8 @@
+from pandas.io.json import json
+
 from util import localfile
 import os.path
-from github.github import *
+import init
 from nlp import nlp
 from util import wordext
 import copy
@@ -9,6 +11,7 @@ from tqdm import tqdm
 from random import sample
 import datetime
 import concurrent.futures
+
 
 part_params = None
 
@@ -41,9 +44,11 @@ def get_pr_list(repo, renew):
     pr_list = []
     prlist_json_filepath = init.local_pr_data_dir + repo + '/pull_list.json'
     if not os.path.exists(prlist_json_filepath):
-        get_repo_info_forPR(repo, 'pull', renew)
+        from github import github_api
+        github_api.get_repo_info_forPR(repo, 'pull', renew)
 
     with open(prlist_json_filepath) as json_file:
+        from pandas.io.json import json
         data = json.load(json_file)
         for p in data:
             pr_list.append(p)
@@ -84,15 +89,19 @@ def preprocess_documents(repo, pulls, renew):
         wordext.get_tokens_from_file(pull['title'], outfile_prefix, 'title')
         if pull["body"]:
             if not os.path.exists(outfile_prefix + "/body_tokens_stemmed.tsv") or renew:
+                import re
                 body_str = re.sub("(<.*?>)", "", pull['body'], flags=re.DOTALL)
                 wordext.get_tokens_from_file(body_str, outfile_prefix, 'body')
 
         # # ----------- commit msg  -----------
         print('check commit')
+        from github.github_api import concat_commits
+        from github.github_api import get_pr_commit
         all_commit_msg = concat_commits(get_pr_commit(repo, pr_id))
         wordext.get_tokens_from_file(all_commit_msg, outfile_prefix, 'commit')
         # # ----------- CODE & FILE  -----------
         print('check code ,file ')
+        from github.github_api import fetch_pr_code_info
         pr_filelist_json = fetch_pr_code_info(repo, pr_id)
         if (len(pr_filelist_json) == 0):
             localfile.write_to_file(outfile_prefix + "/updateAt.txt",
@@ -139,6 +148,7 @@ def getCodeLocation(filelist_json, outfile_prefix):
         file = f_json["name"]
         location_set[file] = []
         # ignore non code file
+        from util import language_tool
         if language_tool.is_text(file):
             continue
         loc_list = f_json['location']['add']
@@ -148,15 +158,15 @@ def getCodeLocation(filelist_json, outfile_prefix):
         json.dump(location_set, outfile)
 
 
-
-# import a new API to create a thread pool
-from concurrent.futures import ThreadPoolExecutor as PoolExecutor
-
-repolist = init.trainModelRepoList
-# create a thread pool of 4 threads
-with PoolExecutor(max_workers=4) as executor:
-
-    # distribute the 1000 URLs among 4 threads in the pool
-    # _ is the body of each page that I'm ignoring right now
-    for _ in executor.map(process_PR, repolist):
-        pass
+# todo commented out for bot
+# # import a new API to create a thread pool
+# from concurrent.futures import ThreadPoolExecutor as PoolExecutor
+#
+# repolist = init.trainModelRepoList
+# # create a thread pool of 4 threads
+# with PoolExecutor(max_workers=4) as executor:
+#
+#     # distribute the 1000 URLs among 4 threads in the pool
+#     # _ is the body of each page that I'm ignoring right now
+#     for _ in executor.map(process_PR, repolist):
+#         pass

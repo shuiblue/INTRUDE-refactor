@@ -110,6 +110,14 @@ def work(repos):
         print("get open PRs from repo: " + repo)
         getCandidatePRs(repo)
 
+        from github import github_api
+        pulls = github_api.get_repo_info_forPR(repo, 'pull', renew=True) #todo renew should be true
+        print("get all " + str(len(pulls)) + "  prs for repo " + repo)
+
+        from model import prepare
+        prepare.preprocess_documents(repo, pulls, renew=False)
+
+
         candidatePR_input_file = init.PR_candidate_List_filePath_prefix + repo.replace('/', '.') + '.txt'
         detection_result_file = output_dir + repo.replace('/', '.') + '.txt'
         try:
@@ -171,7 +179,7 @@ def execute(repoList_file):
 
 if __name__ == "__main__":
     print("a")
-    execute(sys.argv[1])
-    # execute("../data/repo_PR_3.txt")
+    # execute(sys.argv[1])
+    execute("../data/repo_PR_4.txt")
     # repos = ['xilinliu/test-INTRUDE']
     # work(repos)

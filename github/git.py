@@ -109,7 +109,7 @@ def fetch_file_list(pull, renew=False):
         time.sleep(0.8)
         for f in li:
             if f.get('changes', 0) <= 5000 and ('filename' in f) and ('patch' in f):
-                file_list.append(fetch_raw_diff.parse_diff(f['filename'], f['patch']))
+                file_list.append(parse_diff(f['filename'], f['patch']))
 
     localfile.write_to_file(save_path, file_list)
     return file_list
@@ -176,7 +176,8 @@ def get_another_pull(pull, renew=False):
             pass
 
     comments_href = pull["_links"]["comments"]["href"]  # found cites in comments, but checking events is easier.
-    comments = api.request(comments_href, True)
+    # comments = api.request(comments_href.replace('https://api.github.com/', ''), True)
+    comments = api.request(comments_href.replace('https://api.github.com/', ''), paginate=True, state='all')
     time.sleep(0.7)
     candidates = []
     for comment in comments:

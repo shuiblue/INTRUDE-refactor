@@ -531,13 +531,15 @@ def getTime(repo, pr):
 #     getFeatureVectorForModeling(renew)
 
 # import a new API to create a thread pool
-from concurrent.futures import ThreadPoolExecutor as PoolExecutor
 
-
-# create a thread pool of 4 threads
-with PoolExecutor(max_workers=1) as executor:
-
-    # distribute the 1000 URLs among 4 threads in the pool
-    # _ is the body of each page that I'm ignoring right now
-    for _ in executor.map(getFeatureVectorForModeling, dataset):
-        pass
+#todo  comment out for bot
+# from concurrent.futures import ThreadPoolExecutor as PoolExecutor
+#
+#
+# # create a thread pool of 4 threads
+# with PoolExecutor(max_workers=1) as executor:
+#
+#     # distribute the 1000 URLs among 4 threads in the pool
+#     # _ is the body of each page that I'm ignoring right now
+#     for _ in executor.map(getFeatureVectorForModeling, dataset):
+#         pass

@@ -31,7 +31,7 @@ if bigram_flag == True:
     commitMSG_file_name = '/commit_bigrams_tokens_stemmed.tsv'
 
 def initNLPModel_per_repo(repo):
-    renew = True
+    renew = False
     # for repo in tqdm(init.trainModelRepoList):
     print('init nlp model for repo: %s' % repo)
     # -------- model for title & description & commit msg

@@ -13,7 +13,7 @@ c = joblib.load(init.model_saved_path)
 
 cite = {}
 renew_pr_list_flag = False
-
+filter_larger_number = True
 filter_out_too_old_pull_flag = True
 filter_already_cite = True
 filter_create_after_merge = False
@@ -131,7 +131,7 @@ def get_topK(repo, num1, topK=10, print_progress=False, use_way='new'):
         if use_way == 'new':
             # feature_vector = get_pr_sim_vector(pullA, pull)
             from model import featurization
-            feature_vector = featurization.get_featureVector_ForPRpair(repo, pullA, pull)
+            feature_vector = featurization.get_featureVector_ForPRpair(repo, str(pullA['number']), str(pull['number']))
             results_featureVector[pull["number"]] = feature_vector
             results[pull["number"]] = c.predict_proba([feature_vector])[0][1]
 
@@ -208,8 +208,5 @@ if __name__ == "__main__":
 
     # detection on history (random sampling)
     if len(sys.argv) == 2:
-        speed_up = True
-        filter_create_after_merge = True
-        filter_larger_number = True
         r = sys.argv[1].strip()
         run_list(r)
