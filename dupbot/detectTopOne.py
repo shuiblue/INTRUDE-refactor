@@ -48,6 +48,7 @@ def have_commit_overlap(p1, p2):
 def get_topK(repo, num1, topK=10, print_progress=False, use_way='new'):
     now = datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
     global last_detect_repo
+    import model
     if last_detect_repo != repo:
         last_detect_repo = repo
         model.calculateNLPmodel.initNLPModel_per_repo(repo)
