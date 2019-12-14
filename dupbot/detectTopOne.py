@@ -1,14 +1,7 @@
-import os
 import sys
-
-from datetime import datetime, timedelta
-# from sklearn.utils import shuffle
-
+from datetime import datetime
 from github import git
 from github import github_api
-
-import os
-import os.path
 from sklearn.externals import joblib
 import init
 import util
