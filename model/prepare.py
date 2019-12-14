@@ -68,7 +68,6 @@ def generatePaths(data, out):
 
 def preprocess_documents(repo, pulls, renew):
     for pull in tqdm(pulls):  # tqdm is used for print progress bar https://github.com/tqdm/tqdm/
-
         pr_id = pull['number']
         # if pr_id != 14378:
         #     continue

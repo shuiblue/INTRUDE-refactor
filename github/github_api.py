@@ -1166,8 +1166,8 @@ def getOldOpenPRs(repo):
                 if minID < latest_pr:
                     print("min(old_openPR_list)" + str(minID))
                     return minID
-                else:
-                    return latest_pr
+                # else:
+                #     return latest_pr
             else:
                 print("latest_pr" + str(latest_pr))
                 return latest_pr
