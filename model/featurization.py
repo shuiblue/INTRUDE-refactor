@@ -456,10 +456,14 @@ def getReferenceSimilarity(repo, pr1, pr2):
     if os.path.exists(pr1_reference_jsonfile):
         with open(pr1_reference_jsonfile) as jsonfile:
             pr1_reference = json.load(jsonfile)[0]
+    else:
+        print(pr1_reference_jsonfile + " not exist")
 
     if os.path.exists(pr2_reference_jsonfile):
         with open(pr2_reference_jsonfile) as jsonfile:
             pr2_reference = json.load(jsonfile)[0]
+    else:
+        print(pr2_reference_jsonfile + " not exist")
 
     if pr1_reference['version'] != '' and pr2_reference['version'] != '':
         sim['version'] = reference_similarity(pr1_reference['version'].split('\t'),
