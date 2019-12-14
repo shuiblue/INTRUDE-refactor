@@ -17,7 +17,7 @@ import json
 
 logger = logging.getLogger('INTRUDE.scraper')
 # nonCodeFileExtensionList = [line.rstrip('\n') for line in open('./data/NonCodeFile.txt')]
-nonCodeFileExtensionList = [line.rstrip('\n') for line in open('../data/NonCodeFile.txt')]
+nonCodeFileExtensionList = [line.rstrip('\n') for line in open(init.currentDIR+'/data/NonCodeFile.txt')]
 # app = Flask(__name__)
 
 # app.config['GITHUB_CLIENT_ID'] = os.environ.get('GITHUB_CLIENT_ID')
