@@ -457,29 +457,34 @@ def getReferenceSimilarity(repo, pr1, pr2):
         with open(pr1_reference_jsonfile) as jsonfile:
             pr1_reference = json.load(jsonfile)[0]
     else:
-        print(pr1_reference_jsonfile + " not exist")
+        pr1_reference = None
 
     if os.path.exists(pr2_reference_jsonfile):
         with open(pr2_reference_jsonfile) as jsonfile:
             pr2_reference = json.load(jsonfile)[0]
     else:
-        print(pr2_reference_jsonfile + " not exist")
+        pr2_reference = None
 
-    if pr1_reference['version'] != '' and pr2_reference['version'] != '':
-        sim['version'] = reference_similarity(pr1_reference['version'].split('\t'),
-                                              pr2_reference['version'].split('\t'))
-    else:
+    if pr1_reference is None or pr2_reference is None:
         sim['version'] = 0
-
-    if pr1_reference['issue'] != '' and pr2_reference['issue'] != '':
-        sim['issue'] = reference_similarity(pr1_reference['issue'].split('\t'), pr2_reference['issue'].split('\t'))
-    else:
         sim['issue'] = 0
-
-    if pr1_reference['SHA'] != '' and pr2_reference['SHA'] != '':
-        sim['SHA'] = reference_similarity(pr1_reference['SHA'].split('\t'), pr2_reference['SHA'].split('\t'))
-    else:
         sim['SHA'] = 0
+    else:
+        if pr1_reference['version'] != '' and pr2_reference['version'] != '':
+            sim['version'] = reference_similarity(pr1_reference['version'].split('\t'),
+                                                  pr2_reference['version'].split('\t'))
+        else:
+            sim['version'] = 0
+
+        if pr1_reference['issue'] != '' and pr2_reference['issue'] != '':
+            sim['issue'] = reference_similarity(pr1_reference['issue'].split('\t'), pr2_reference['issue'].split('\t'))
+        else:
+            sim['issue'] = 0
+
+        if pr1_reference['SHA'] != '' and pr2_reference['SHA'] != '':
+            sim['SHA'] = reference_similarity(pr1_reference['SHA'].split('\t'), pr2_reference['SHA'].split('\t'))
+        else:
+            sim['SHA'] = 0
 
     pr1_urlList = get_url_list(pr1_reference_url_path)
     pr2_urlList = get_url_list(pr2_reference_url_path)

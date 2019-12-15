@@ -56,7 +56,7 @@ def getCandidatePRs(repo):
                     r, n, created_at = t.strip().split()
                     has.add((r, n))
             print("length : " + str(len(has)))
-            return has
+            return
 
     with open(candidatePR_input_file, 'w') as f:  # opens file for appending
         print('', end="", file=f)  #
@@ -111,7 +111,7 @@ def work(repos):
         getCandidatePRs(repo)
 
         from github import github_api
-        pulls = github_api.get_repo_info_forPR(repo, 'pull', renew=True) #todo renew should be true
+        pulls = github_api.get_repo_info_forPR(repo, 'pull', renew=False) #todo renew should be true in non-test scene
         print("get all " + str(len(pulls)) + "  prs for repo " + repo)
 
         from model import prepare
@@ -178,8 +178,7 @@ def execute(repoList_file):
 
 
 if __name__ == "__main__":
-    print("a")
     execute(sys.argv[1])
-    # execute("../data/repo_PR_4.txt")
+    # execute("../data/repo_PR_1.txt")
     # repos = ['xilinliu/test-INTRUDE']
     # work(repos)

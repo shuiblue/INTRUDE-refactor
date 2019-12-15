@@ -966,7 +966,7 @@ def get_repo_info_forPR(repo, type, renew):
                 if (len(ret) > 0):
                     for pr in ret:
                         # if (pr['number'] >= tocheck_pr):
-                        if (pr['number'] > tocheck_pr):
+                        if (pr['number'] >= tocheck_pr):
                             filtered_result.append(pr)
                         else:
                             print('get all ' + str(len(filtered_result)) + ' prs')
@@ -1166,8 +1166,8 @@ def getOldOpenPRs(repo):
                 if minID < latest_pr:
                     print("min(old_openPR_list)" + str(minID))
                     return minID
-                # else:
-                #     return latest_pr
+                else:
+                    return latest_pr
             else:
                 print("latest_pr" + str(latest_pr))
                 return latest_pr
