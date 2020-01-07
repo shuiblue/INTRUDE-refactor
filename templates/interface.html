@@ -1,0 +1,332 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/table.css') }}">
+
+</head>
+<body>
+<!-- links to other page -->
+{#{% if id == "home" %}#}
+{#    <a href="/rejects">Rejected</a>#}
+{#{% else %}#}
+{#    <a href="/">Home</a>#}
+{#{% endif %}#}
+<p>
+<form method=POST action="{{ url_for('update_db') }}">
+    <button>Update detection result</button>
+</form>
+<form method=POST action="{{ url_for('updatePRstate') }}">
+    <button>Update PR state</button>
+</form>
+<form method=POST action="{{ url_for('DupPRPair') }}">
+  get dup PR >  <input type="text" name="threshold"><br>
+  <input type="submit" value="get!">
+</form>
+
+<form method=POST action="{{ url_for('getPRFeatureBiggerThanDotEight') }}">
+    <button>get PR pair any feature similarity > 0.8</button>
+</form>
+<p>
+{#<p>#}
+{#    <!-- show/hide additional pairs buttons -->#}
+{#    {% if id == "home" %}#}
+{#        <form method=POST action="{{ url_for('show_hide_switch') }}">#}
+{#            <button type="submit" value="hide" name="show_hide_button">Show only one pair per repo</button>#}
+{#            <button type="submit" value="show" name="show_hide_button">Show all pairs</button>#}
+{#        </form>#}
+{#    {% endif %}#}
+{#<p>#}
+    <!-- table sorting option buttons -->
+    <button onclick="sortTable('score')">Sort by score</button>
+    <button onclick="sortTable('timestamp')">Sort by timestamp</button>
+    <button onclick="sortTable('repo')">Sort by repo</button>
+
+
+    <table  class='blueTable' id='tbl' border=1 width="140%">
+        <!-- headings -->
+    <thead>
+        <tr>
+                <th width="2%">repo</th>
+    <th width="2%">pr1</th>
+    <th width="2%">pr2</th>
+    <th width="2%">score</th>
+    <th width="2%">title(lsi, tfidf)</th>
+    <th width="2%">body (lsi, tfidf)</th>
+    <th width="2%">commit (lsi, tfidf)</th>
+    <th width="2%">pr1/pr2 add/delete files</th>
+    <th width="2%">add/delete files_sim</th>
+    <th width="2%">add/delete filenames_sim</th>
+    <th width="2%">code_sim_addCode(lsi, lsi_overlap_filepath, lsi_same_filename, tfidf_add, tfidf_overlap_filepath, tfidf_same_filename</th>
+    <th width="2%">code_sim_deleteCode(lsi, lsi_overlap_filepath, lsi_same_filename, tfidf_add, tfidf_overlap_filepath, tfidf_same_filename</th>
+    <th width="2%">location_similarity (all/overlap) file</th>
+    <th width="2%">timeInterval</th>
+    <th width="2%">ref  version/issue/SHA/url</th>
+    <th width="2%">comment_sent</th>
+    <th width="2%">notes</th>
+<!--    <th width="2%">comment_left</th>-->
+<!--    <th width="2%">repoID</th>-->
+<!--    <th width="2%">toppair</th>-->
+    <th width="2%">timestamp</th>
+    <th width="2%">pr1/pr2 state</th>
+    <th width="2%">pr1/pr2 #comments</th>
+    <th width="2%">pr1/pr2 #participant</th>
+    <th width="2%">#overlapped_participants</th>
+<!--            <th width="5%">repo</th>-->
+<!--            <th width="3%">Timestamp</th>-->
+<!--            <th width="2%">pr1</th>-->
+<!--            <th width="2%">pr2</th>-->
+<!--             <th width="2%">pr1_state</th>-->
+<!--            <th width="2%">pr2_state</th>-->
+<!--             <th width="2%">#pr1 comments</th>-->
+<!--            <th width="2%">#pr2 comments</th>-->
+<!--             <th width="2%">#pr1 pariticipants</th>-->
+<!--            <th width="2%">#pr2 pariticipants</th>-->
+<!--             <th width="2%">#overlapped pariticipants</th>-->
+<!--            <th width="2%">Score</th>-->
+<!--            <th width="6%">Send comment?</th>-->
+<!--            <th width="6%">Notes</th>-->
+<!--            <th width="3%">title (lsi, tfidf)</th>-->
+<!--            <th width="3%">description</th>-->
+<!--            <th width="3%">patch content</th>-->
+<!--            <th width="3%">patch content overlap</th>-->
+<!--            <th width="3%">changed file</th>-->
+<!--            <th width="3%">changed file overlap</th>-->
+<!--            <th width="3%">location</th>-->
+<!--            <th width="3%">location overlap</th>-->
+<!--            <th width="3%">issue number</th>-->
+<!--            <th width="3%">commit message</th>-->
+        </tr>
+        </thead>
+    <tfoot>
+        <!-- loop through rows (top pr pairs), showing db as a table on page -->
+{#        {% for row in data %}#}
+{#            <tr>#}
+{#                <!-- repo name, links to repo page -->#}
+{#                <td><a href="https://github.com/{{ row[1] }}" target="_blank">{{ row[1] }}</a></td>#}
+{#                <!-- date/timestamp -->#}
+{#                <td>{{ row[21] }}</td>#}
+{#                <!-- PR #1, links to PR1 page -->#}
+{#                <td><a href="https://github.com/{{ row[1] }}/pull/{{ row[2] }}" target="_blank">{{ row[2] }}<a/></td>#}
+{#                <!-- PR #2, links to PR2 page -->#}
+{#                <td><a href="https://github.com/{{ row[1] }}/pull/{{ row[3] }}" target="_blank">{{ row[3] }}<a/></td>#}
+{#                <!-- similarity score -->#}
+{#                <td>{{ row[4] }}</td>#}
+{#                <!-- send/don't send comment buttons -->#}
+{#                <td>#}
+{##}
+{#                    {% if id == "home" %}#}
+{##}
+{#                        {% if row[15] == 0 %}#}
+{#                            <form method=POST action="{{ url_for('send_comment') }}">#}
+{#                                <button value="{{ row[0] }}" name="send_comment_button">Send comment</button>#}
+{#                            <p>#}
+{#                                </form>#}
+{#                            <form method=POST action="{{ url_for('no_send_comment') }}">#}
+{#                                <button value="{{ row[0] }}" name="no_send_comment_button">Don't send comment</button>#}
+{#                            </form>#}
+{#                        {% elif row[15] == 1 %}#}
+{#                            Comment sent.#}
+{#                        {% endif %}#}
+{#                    {% else %}#}
+{#                        <form method=POST action="{{ url_for('reset_send_comment') }}">#}
+{#                            <button value="{{ row[0] }}" name="reset_button">Reset</button>#}
+{#                        </form>#}
+{#                    {% endif %}#}
+{#            </td>#}
+{#            <!-- note box, save button -->#}
+{#            <td>#}
+{#                <form method=POST action="{{ url_for('notes') }}">#}
+{#                    <!-- if there are not yet any notes, display filler -->#}
+{#                    <!-- else (if there are already notes), display them -->#}
+{#                    <textarea rows="4" width="100%" name="notebox">{% if row[16] == None %}Input notes here...#}
+{#                        {% else %}{{ row[16] }}#}
+{#                    {% endif %}#}
+{#          </textarea>#}
+{#                    <button value="{{ row[0] }}" name="save_button">Save</button>#}
+{#                </form>#}
+{#            </td>#}
+{#            <!-- FEATURE SCORE LIST -->#}
+{#            <!-- title -->#}
+{#            <td>{{ row[5] }}</td>#}
+{#            <!-- description -->#}
+{#            <td>{{ row[6] }}</td>#}
+{#            <!-- patch content -->#}
+{#            <td>{{ row[7] }}</td>#}
+{#            <!-- patch content overlap -->#}
+{#            <td>{{ row[8] }}</td>#}
+{#            <!-- changed file -->#}
+{#            <td>{{ row[9] }}</td>#}
+{#            <!-- changed file overlap -->#}
+{#            <td>{{ row[10] }}</td>#}
+{#            <!-- location -->#}
+{#            <td>{{ row[11] }}</td>#}
+{#            <!-- location overlap -->#}
+{#            <td>{{ row[12] }}</td>#}
+{#            <!-- issue number -->#}
+{#            <td>{{ row[13] }}</td>#}
+{#            <!-- commit message -->#}
+{#            <td>{{ row[14] }}</td>#}
+{#            <!-- END FEATURE SCORE LIST -->#}
+{#            </tr>#}
+{#        {% endfor %}#}
+<!-- list non-top-pairs, if "show" -->
+{% for row in data_dups %}
+    <tr>
+        <!-- repo name, links to repo page -->
+        <td><a href="https://github.com/{{ row[1] }}" target="_blank">{{ row[1] }}</a></td>
+        <!-- PR #1, links to PR1 page -->
+        <td><a href="https://github.com/{{ row[1] }}/pull/{{ row[2] }}" target="_blank">{{ row[2] }}<a/></td>
+        <!-- PR #2, links to PR2 page -->
+        <td><a href="https://github.com/{{ row[1] }}/pull/{{ row[3] }}" target="_blank">{{ row[3] }}<a/></td>
+<!--        score 4-->
+        <td>{{ row[4] }}</td>
+<!--        title lsi, tfidf-->
+        <td>{{ row[5], row[6] }}</td>
+<!--        body lsi, tfidf-->
+     <td>{{ row[7] , row[8] }}</td>
+<!--        commit lsi, tfidf-->
+     <td>{{ row[9] , row[10] }}</td>
+<!-- pr1/pr2 add/delete file-->
+        <td>{{ row[11], row[12] , -row[13], -row[14] }}</td>
+<!--        add/delete  file sim-->
+     <td>{{ row[15] , row[16] }}</td>
+<!--        add/delete  fileNAME sim-->
+     <td>{{ row[17] , row[18] }}</td>
+<!-- code_sim_add Code(lsi, lsi_overlap_filepath, lsi_same_filename, tfidf_add, tfidf_overlap_filepath, tfidf_same_filename-->
+     <td>{{ row[19],row[20],row[21],row[22] ,row[23],row[24] }}</td>
+<!-- code_sim_delete Code(lsi, lsi_overlap_filepath, lsi_same_filename, tfidf_add, tfidf_overlap_filepath, tfidf_same_filename-->
+     <td>{{ row[25],row[26],row[27],row[28] ,row[29],row[30] }}</td>
+        <!-- ocation_similarity (all/overlap) file -->
+        <td>{{ row[31] , row[32] }}</td>
+<!--        time interval-->
+        <td>{{ row[33]  }}</td>
+ <!--     ref_version,ref_issue,ref_SHA,ref_url,-->
+        <td>{{ row[34],row[35],row[36],row[37]  }}</td>
+        <!-- send/don't send comment buttons -->
+        <td>
+
+            {% if id == "home" %}
+
+                {% if row[38] == 0 %}
+
+                    <form method=POST action="{{ url_for('send_comment') }}">
+            <textarea rows="4" width="100%" name="comments">Hi there! This pull request looks like it might be a duplicate of #%i, since it has _the same issue number_ , _a similar title_, and similar commits.</textarea>
+                        <button value="{{ row[0] }}" name="send_comment_button">Send comment</button>
+                        <p>
+                    </form>
+                    <form method=POST action="{{ url_for('no_send_comment') }}">
+                        <button value="{{ row[0] }}" name="no_send_comment_button">Don't send comment</button>
+                    </form>
+                {% elif row[38] == 1 %}
+                    Comment sent.
+                {% endif %}
+            {% else %}
+                <form method=POST action="{{ url_for('reset_send_comment') }}">
+                    <button value="{{ row[0] }}" name="reset_button">Reset</button>
+                </form>
+            {% endif %}
+        </td>
+
+        {#      <td>#}
+        {#        {% if row[20] == 2 %}#}
+        {#        Comment already sent to this repo.#}
+        {#        {% elif row[20] == 0 %}#}
+        {#        There is already a pair from this repo.#}
+        {#        <p>#}
+        {#        <form method=POST action="{{ url_for('change_toppair')}}">#}
+        {#          <button value="{{row[0]}}" name="move">Choose this one instead</button>#}
+        {#        </form>#}
+        {#        {% endif %}#}
+        {#      </td>#}
+        <!-- note box, save button -->
+        <td>
+            <form method=POST action="{{ url_for('notes') }}">
+                <!-- if there are not yet any notes, display filler -->
+                <!-- else (if there are already notes), display them -->
+                <textarea rows="4" width="100%" name="notebox">{% if row[39] == None %}Input notes here...
+                    {% else %}{{ row[39] }}
+                {% endif %}
+          </textarea>
+                <button value="{{ row[0] }}" name="save_button">Save</button>
+            </form>
+        </td>
+        <!-- FEATURE SCORE LIST -->
+        <!-- timestamp -->
+        <td>{{ row[43] }}</td>
+        <!-- pr1/pr2 statues -->
+        <td>{{ row[44],row[45] }}</td>
+        <!-- pr1/pr2 #comments -->
+        <td>{{ row[46],row[47] }}</td>
+       <!-- pr1/pr2 #participants -->
+        <td>{{ row[48],row[49] }}</td>
+        <!-- pr1/pr2 overlap #participants -->
+        <td>{{ row[50] }}</td>
+
+        <!-- END FEATURE SCORE LIST -->
+    </tr>
+{% endfor %}
+</tfoot>
+</table>
+
+<!-- function to sort the table by column -->
+<script>
+    function sortTable(sort_by) {
+        var table, rows, switching, i, x, y, n, shouldSwitch, dir, switchcount = 0;
+        if (sort_by == "score") {
+            n = 4;
+        }                // sort by sim. score
+        else if (sort_by == "timestamp") {
+            n = 1;
+        }   // sort by timestamp
+        else {
+            n = 0;
+        }                              // sort by repo
+        if (n == 0) {
+            dir = "asc";
+        } else {
+            dir = "desc";
+        }
+        table = document.getElementById("tbl");
+        switching = true;
+        // loop until no switching has been done:
+        while (switching) {
+            // start by saying: no switching is done:
+            switching = false;
+            rows = table.rows;
+            // loop through table rows (except headers):
+            for (i = 1; i < (rows.length - 1); i++) {
+                // start by saying there should be no switching:
+                shouldSwitch = false;
+                // get the two elements you want to compare, one from current row and one from the next:
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                // check if the two rows should switch place, based on the direction, asc or desc:
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        // if so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        // if so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                // if a switch has been marked, switch and mark that it's been done:
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                // each time a switch is done, increase this count by 1:
+                switchcount++;
+            }
+        }
+    }
+
+
+
+
+</script>
+</body>
+</html>

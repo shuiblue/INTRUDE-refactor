@@ -37,6 +37,11 @@ def initNLPModel_per_repo(repo):
     # -------- model for title & description & commit msg
     global text_model
     textMode_save_id = repo.replace('/', '_') + '_title_body_commitmsg'
+    nlpTextmode_path = init.model_dir + '%s.dictionary' % textMode_save_id
+    import os.path
+
+    if not os.path.isfile(nlpTextmode_path):
+        renew = True
     try:
         text_model = nlp.Model([], textMode_save_id, renew)
         print('get text_model for repo: %s from local file' % repo)

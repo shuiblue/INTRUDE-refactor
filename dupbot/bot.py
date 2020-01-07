@@ -178,7 +178,7 @@ def execute(repoList_file):
 
 
 if __name__ == "__main__":
-    execute(sys.argv[1])
-    # execute("../data/repo_PR_1.txt")
+    # execute(sys.argv[1])
+    execute("../data/repo_PR_2.txt")
     # repos = ['xilinliu/test-INTRUDE']
     # work(repos)
