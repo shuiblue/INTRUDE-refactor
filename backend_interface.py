@@ -313,7 +313,7 @@ def top_pair_featureBiggerThanDotEight():
                   code_sim_deleteCodetfidf_same_filename >0.8 or location_similarity_allfile >0.8 or \
                   location_similarity_overlapfile >0.8 or ref_version =1 or ref_issue =1 or ref_SHA =1 or ref_url =1  )\
                   AND (notes NOT LIKE '%FP%' OR notes NOT LIKE '%doc%' OR notes IS NULL)\
-                  AND TIMESTAMPDIFF(DAY, `timestamp`, CURRENT_TIMESTAMP()) <= 20\
+                  AND TIMESTAMPDIFF(DAY, `timestamp`, CURRENT_TIMESTAMP()) <= 2\
             ORDER BY timestamp DESC;"
     cur.execute(sql_str)
     data_sorted = cur.fetchall()
@@ -328,7 +328,7 @@ def top_pair_similarityBiggerThanThreshold(threshold):
                WHERE a.repo COLLATE utf8mb4_unicode_ci NOT IN  (SELECT DISTINCT b.repo FROM dupPR_repo b)\
                      AND  (score >" + threshold + ")\
                      AND (notes NOT LIKE '%FP%' OR notes NOT LIKE '%doc%' OR notes IS NULL)\
-                     AND TIMESTAMPDIFF(DAY, `timestamp`, CURRENT_TIMESTAMP()) <= 20\
+                     AND TIMESTAMPDIFF(DAY, `timestamp`, CURRENT_TIMESTAMP()) <= 2\
                ORDER BY timestamp DESC;"
     cur.execute(sql_str)
     data_sorted = cur.fetchall()
