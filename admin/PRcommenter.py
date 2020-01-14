@@ -3,7 +3,7 @@ import requests
 
 # Authentication info
 
-with open('../input/authParams.txt') as f:
+with open('./input/authParams.txt') as f:
     USERNAME, TOKEN = f.read().splitlines()
 
 
