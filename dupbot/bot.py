@@ -164,6 +164,7 @@ def execute(repoList_file):
                 and ('curso-javascript-ninja' not in repo_str) \
                 and ('ironhack-labs' not in repo_str) \
                 and ('LambdaSchool' not in repo_str) \
+                and ('curriculum' not in repo_str) \
                 and ('codecamp' not in repo_str):
             repos.append(repo_str)
     print(str(len(repos)) + " repos")
