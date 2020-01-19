@@ -52,7 +52,8 @@ app = Flask(__name__)
 htmlpage_url = 'interface.html'
 
 # Connect to MySQL database
-with open('./input/mysqlParams.txt') as f:
+# with open('./input/mysqlParams.txt') as f:
+with open('../input/mysqlParams.txt') as f:
     MYSQL_USER, MYSQL_PASS, MYSQL_HOST, PORT = f.read().splitlines()
 # conn = mysql.connector.connect(user=MYSQL_USER, password=MYSQL_PASS, host=MYSQL_HOST, database='repolist', port='3306')
 conn = mysql.connector.connect(user=MYSQL_USER, password=MYSQL_PASS, host=MYSQL_HOST, database='fork', port=PORT)
@@ -61,6 +62,8 @@ cur = conn.cursor()
 show_hide = 'hide'
 
 def updateResult():
+    exe_time = (datetime.now() + timedelta(minutes=1)).strftime("%H:%M")
+    print(exe_time + " check again ... ")
     if platform.system() == 'Windows':
         path = 'C:\\Users\\annik\\Documents\\REUSE\\interface\\dupPR'
     elif platform.system() == 'Linux':
@@ -184,6 +187,48 @@ def updateResult():
                     conn.commit()
     print('update pr states...')
     updatePRstate()
+
+    threshold = '0.9'
+    print("find pr pairs similar score is higher than "+ threshold)
+    idlist = top_pair_similarityBiggerThanThreshold_unMarked(threshold)
+    print("send email..")
+    notify_admin(str(len(idlist)))
+    markEmailedResultToDB(idlist)
+    print("update " + str(len(idlist)) + "in database")
+
+def markEmailedResultToDB(idlist):
+    sql_str =  "UPDATE duppr_pair_update set notify_admin = True where id in "+ idlist
+    print(sql_str)
+    cur.execute(sql_str)
+    conn.commit()
+
+def notify_admin(num_newPRpairs):
+    cmd_str ="echo \" detect "+ num_newPRpairs +" duplicate PR pairs, please check ASAP at http://128.2.112.25:5000/ :)\" | mail -s \"dupPR_bot: found new pairs\" shuruiz@andrew.cmu.edu"
+    print(cmd_str)
+    os.system(cmd_str)
+
+def top_pair_similarityBiggerThanThreshold_unMarked(threshold):
+    sql_str = "SELECT id \
+               FROM duppr_pair_update a\
+               WHERE a.repo COLLATE utf8mb4_unicode_ci NOT IN  (SELECT DISTINCT b.repo FROM dupPR_repo b)\
+                     AND  (score >" + threshold + ")\
+                     AND (notes NOT LIKE '%FP%' OR notes NOT LIKE '%doc%' OR notes IS NULL)\
+                     AND TIMESTAMPDIFF(DAY, `timestamp`, CURRENT_TIMESTAMP()) <= 2\
+                     AND notify_admin is NULL and checked is Null\
+               ORDER BY timestamp DESC;"
+    cur.execute(sql_str)
+    data_sorted = cur.fetchall()
+    conn.commit()  # save changes
+    # print(str(len(data_sorted)))
+
+    idList = []
+    for id in data_sorted:
+        idList.append(str(id[0]))
+
+    idList_str = "("+ ', '.join(map(str, idList)) +")"
+    print(idList_str)
+    return idList  # return the sorted list of all pairs
+
 
 def updatePRstate():
     data = []
