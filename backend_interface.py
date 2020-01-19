@@ -339,6 +339,20 @@ def top_pair_similarityBiggerThanThreshold_filterOverlapParticipant(threshold,nu
     return data_sorted  # return the sorted list of all pairs
 
 
+@app.route('/findRepo', methods=['POST'])
+def findRepo():
+    repo = request.form['repo']
+    sql_str = "SELECT * \
+                  FROM duppr_pair_update \
+                  WHERE repo = '"+ repo+ "\'\
+                  ORDER BY timestamp DESC;"
+    print(sql_str)
+    cur.execute(sql_str)
+    data_sorted = cur.fetchall()
+    conn.commit()  # save changes
+    return render_template(htmlpage_url, id="home", data_dups=data_sorted)
+
+
 
 
 @app.route('/filterOverlapParticipants', methods=['POST'])

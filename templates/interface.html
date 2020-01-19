@@ -11,12 +11,12 @@
 {# <a href="/">Home</a>#}
 {#{% endif %}#}
 <p>
-<form method=POST action="{{ url_for('update_db') }}">
-    <button>Update detection result</button>
-</form>
-<form method=POST action="{{ url_for('updatePRstate') }}">
-    <button>Update PR state</button>
-</form>
+<!--<form method=POST action="{{ url_for('update_db') }}">-->
+<!--    <button>Update detection result</button>-->
+<!--</form>-->
+<!--<form method=POST action="{{ url_for('updatePRstate') }}">-->
+<!--    <button>Update PR state</button>-->
+<!--</form>-->
 
 
 <form method=POST action="{{ url_for('getPRFeatureBiggerThanDotEight') }}">
@@ -26,6 +26,11 @@
  <form method=POST action="{{ url_for('filterOverlapParticipants') }}">
     get dup PR pair with <input type="text" name="numOverlapParticipants"> overlapping participants<br>
      Threshold > <input type="text" name="threshold">
+    <input type="submit" value="get!">
+</form>
+
+ <form method=POST action="{{ url_for('findRepo') }}">
+    get repo: <input type="text" name="repo"> <br>
     <input type="submit" value="get!">
 </form>
 
