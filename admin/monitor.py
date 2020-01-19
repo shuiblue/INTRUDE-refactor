@@ -70,7 +70,7 @@ def updateResult():
         # for every file (repository) in the dupPR directory
     for dir_name in os.listdir(path):
 
-        print(dir_name)
+        # print(dir_name)
         # find path to this file
         filepath = path
         if platform.system() == 'Windows':
@@ -79,15 +79,15 @@ def updateResult():
             filepath += '/'
         filepath += dir_name
         if not os.path.isdir(filepath):
-            print("not dir " + filepath)
+            # print("not dir " + filepath)
             continue
         record_date = datetime.strptime(dir_name, '%Y-%m-%d')
         if ((datetime.now() - record_date).days > 2):
-            print(str(record_date) + "is older than 2 days, skip")
+            # print(str(record_date) + "is older than 2 days, skip")
             continue
 
         for repoPRlist in os.listdir(filepath):
-            print(repoPRlist)
+            # print(repoPRlist)
             repo_filepath = filepath + "/" + repoPRlist
             # open this file
             with open(repo_filepath) as tsv:
