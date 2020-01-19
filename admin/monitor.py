@@ -190,12 +190,12 @@ def updateResult():
 
     threshold = '0.9'
     print("find pr pairs similar score is higher than "+ threshold)
-    idlist = top_pair_similarityBiggerThanThreshold_unMarked(threshold)
+    idlist_str = top_pair_similarityBiggerThanThreshold_unMarked(threshold)
     print("send email..")
-    if (len(idlist)>0):
-        notify_admin(str(len(idlist)))
-        markEmailedResultToDB(idlist)
-        print("update " + str(len(idlist)) + "in database")
+    if (len(idlist_str.replace('()',''))>0):
+        notify_admin(str(len(idlist_str)))
+        markEmailedResultToDB(idlist_str)
+        print("update " + str(len(idlist_str)) + "in database")
     else:
         print("no new duplicate pr found... wait...")
 
