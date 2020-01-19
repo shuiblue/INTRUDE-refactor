@@ -421,7 +421,7 @@ class GitHubAPI(object):
         :param issue_id: int, either an issue or a Pull Request id
         """
         url = "repos/%s/issues/%s/timeline" % (repo, issue_id)
-        print(url)
+        # print(url)
         events = self.request(url, paginate=True, state='all')
         return events
 
