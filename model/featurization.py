@@ -394,7 +394,7 @@ def filterNonCodeFile(file_list):
         for extension in nonCodeFileExtensionList:
             if not file.endswith(extension):
                 result.append(file)
-    print("filted file list size : " + str(len(result) + "origin size: " + str(len(file_list))))
+    print("filted file list size : " + str(len(result)) + "origin size: " + str(len(file_list)))
     return result
 
 

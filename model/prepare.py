@@ -156,16 +156,16 @@ def getCodeLocation(filelist_json, outfile_prefix):
     with open(outfile_prefix + "/code_loc.json", 'w+') as outfile:
         json.dump(location_set, outfile)
 
+if __name__ == "__main__":
+## todo commented out for bot, --- added main function to avoid import and execute ?
+# import a new API to create a thread pool
+    from concurrent.futures import ThreadPoolExecutor as PoolExecutor
 
-# todo commented out for bot
-# # import a new API to create a thread pool
-# from concurrent.futures import ThreadPoolExecutor as PoolExecutor
-#
-# repolist = init.trainModelRepoList
-# # create a thread pool of 4 threads
-# with PoolExecutor(max_workers=4) as executor:
-#
-#     # distribute the 1000 URLs among 4 threads in the pool
-#     # _ is the body of each page that I'm ignoring right now
-#     for _ in executor.map(process_PR, repolist):
-#         pass
+    repolist = init.trainModelRepoList
+    # create a thread pool of 4 threads
+    with PoolExecutor(max_workers=4) as executor:
+
+        # distribute the 1000 URLs among 4 threads in the pool
+        # _ is the body of each page that I'm ignoring right now
+        for _ in executor.map(process_PR, repolist):
+            pass
