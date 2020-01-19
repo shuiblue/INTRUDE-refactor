@@ -52,8 +52,8 @@ app = Flask(__name__)
 htmlpage_url = 'interface.html'
 
 # Connect to MySQL database
-# with open('./input/mysqlParams.txt') as f:
-with open('../input/mysqlParams.txt') as f:
+with open('./input/mysqlParams.txt') as f:
+# with open('../input/mysqlParams.txt') as f:
     MYSQL_USER, MYSQL_PASS, MYSQL_HOST, PORT = f.read().splitlines()
 # conn = mysql.connector.connect(user=MYSQL_USER, password=MYSQL_PASS, host=MYSQL_HOST, database='repolist', port='3306')
 conn = mysql.connector.connect(user=MYSQL_USER, password=MYSQL_PASS, host=MYSQL_HOST, database='fork', port=PORT)
