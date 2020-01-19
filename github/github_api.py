@@ -189,7 +189,7 @@ class GitHubAPI(object):
 
                 try:
                     r = token.request(url, method=method, data=data, **params)
-                    print(r.url)
+                    # print(r.url)
                 except requests.ConnectionError:
                     print('except requests.ConnectionError')
                     continue
