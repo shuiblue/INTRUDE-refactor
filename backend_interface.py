@@ -106,7 +106,7 @@ def update_db():
     # for every file (repository) in the dupPR directory
     for dir_name in os.listdir(path):
 
-        print(dir_name)
+        # print(dir_name)
         # find path to this file
         filepath = path
         if platform.system() == 'Windows':
@@ -115,15 +115,15 @@ def update_db():
             filepath += '/'
         filepath += dir_name
         if not os.path.isdir(filepath):
-            print("not dir " + filepath)
+            # print("not dir " + filepath)
             continue
         record_date = datetime.strptime(dir_name, '%Y-%m-%d')
         if ((datetime.now() - record_date).days > 2):
-            print(str(record_date) + "is older than 2 days, skip")
+            # print(str(record_date) + "is older than 2 days, skip")
             continue
 
         for repoPRlist in os.listdir(filepath):
-            print(repoPRlist)
+            # print(repoPRlist)
             repo_filepath = filepath + "/" + repoPRlist
             # open this file
             with open(repo_filepath) as tsv:
@@ -279,7 +279,7 @@ def notes():
     repo_id = request.form['save_button']  # get repo name
     # update_sql = "UPDATE duppr_pair SET notes= \'%s\' WHERE id=%s" % (note, repo_id)
     update_sql = "UPDATE duppr_pair_update SET notes= \'%s\' WHERE id=%s" % (note, repo_id)
-    print(update_sql)
+    # print(update_sql)
     cur.execute(update_sql)  # save notes to db
     conn.commit()  # save changes
     return load_home()
@@ -318,7 +318,7 @@ def top_pair_featureBiggerThanDotEight():
     cur.execute(sql_str)
     data_sorted = cur.fetchall()
     conn.commit()  # save changes
-    print(str(len(data_sorted)))
+    # print(str(len(data_sorted)))
     return data_sorted  # return the sorted list of all pairs@app.route('/top-pair')
 
 
@@ -333,7 +333,7 @@ def top_pair_similarityBiggerThanThreshold(threshold):
     cur.execute(sql_str)
     data_sorted = cur.fetchall()
     conn.commit()  # save changes
-    print(str(len(data_sorted)))
+    # print(str(len(data_sorted)))
     return data_sorted  # return the sorted list of all pairs
 
 
@@ -364,8 +364,8 @@ def send_comment():
                     # cur.execute("UPDATE duppr_pair SET comment_sent=1 WHERE id=%s",
                     (pair_id,))  # change comment_sent value to 1 -- flags as sent
         conn.commit()  # save changes
-        print(cur.rowcount,
-              "rows updated in duppr_pair")  # terminal notification to inform how many rows (pairs) have been altered
+        # print(cur.rowcount,
+        #       "rows updated in duppr_pair")  # terminal notification to inform how many rows (pairs) have been altered
 
         # insert repo into duppr_repo
         insert_sql = "insert into dupPR_repo (repo, pr1, pr2) values (%s , %s , %s)"
@@ -483,7 +483,7 @@ def analyzePREvents(PR_events):
             comment_count += 1
     if 'GitHub' in participant_list:
         participant_list.remove('GitHub')
-    print(str(len(set(participant_list))) + " participants " + str(comment_count) + " comments")
+    # print(str(len(set(participant_list))) + " participants " + str(comment_count) + " comments")
     return set(participant_list), comment_count
 
 
@@ -508,7 +508,7 @@ def update_pr_state_db(repo, pr1, pr2, pr1_status, pr2_status, pr1_participant_n
         pr1_status, pr2_status, pr1_participant_num, pr2_participant_num, pr1_num_comments, pr2_num_comments,
         num_participants_overlap, repo, pr1, pr2))
     conn.commit()  # save changes
-    print("update %s pr status %s %s  %s %s " % (repo, pr1, pr2, pr1_status, pr2_status))
+    # print("update %s pr status %s %s  %s %s " % (repo, pr1, pr2, pr1_status, pr2_status))
 
 
 # Render page with rejected PR pairs
