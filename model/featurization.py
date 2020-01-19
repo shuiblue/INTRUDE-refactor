@@ -35,6 +35,8 @@ if bigram_flag == True:
     commitMSG_file_name = '/commit_bigrams_tokens_stemmed.tsv'
 
 
+nonCodeFileExtensionList = [line.rstrip('\n') for line in open(init.currentDIR+'/data/NonCodeFile.txt')]
+
 def get_location_similarity_map(repo, pr1, pr2, overlap_addFiles):
     pr1_locList, pr1_overlap_loc = getPRLocationList(repo, pr1, overlap_addFiles)
     pr2_locList, pr2_overlap_loc = getPRLocationList(repo, pr2, overlap_addFiles)
@@ -124,11 +126,11 @@ def location_similarity(la, lb):
     # return (match_a.count(True) + match_b.count(True)) / (len(match_a) + len(match_b))
 
 
-def get_file_similarity(pr1_add_files, pr2_add_files, pr1_delete_files, pr2_delete_files):
-    sim = {}
-    sim['add'] = list_similarity(pr1_add_files, pr2_add_files)
-    sim['delete'] = list_similarity(pr1_delete_files, pr2_delete_files)
-    return [sim['add'], sim['delete']]
+# def get_file_similarity(pr1_add_files, pr2_add_files, pr1_delete_files, pr2_delete_files):
+#     sim = {}
+#     sim['add'] = list_similarity(pr1_add_files, pr2_add_files)
+#     sim['delete'] = list_similarity(pr1_delete_files, pr2_delete_files)
+#     return [sim['add'], sim['delete']]
 
 
 def getFileCodeMap(repo, pr):
@@ -386,6 +388,17 @@ feature vector
 '''
 
 
+def filterNonCodeFile(file_list):
+    result = []
+    for file in file_list:
+        for extension in nonCodeFileExtensionList:
+            if not file.endswith(extension):
+                result.append(file)
+    print("filted file list size : " + str(len(result) + "origin size: " + str(len(file_list))))
+    return result
+
+
+
 def get_featureVector_ForPRpair(repo, pr1, pr2):
     similarity_vector = []
 
@@ -403,10 +416,16 @@ def get_featureVector_ForPRpair(repo, pr1, pr2):
     pr1_file_add_code_map, pr1_file_delete_code_map = getFileCodeMap(repo, pr1)
     pr2_file_add_code_map, pr2_file_delete_code_map = getFileCodeMap(repo, pr2)
 
-    pr1_add_files = list(pr1_file_add_code_map.keys())
-    pr2_add_files = list(pr2_file_add_code_map.keys())
-    pr1_delete_files = list(pr1_file_delete_code_map.keys())
-    pr2_delete_files = list(pr2_file_delete_code_map.keys())
+    pr1_add_files_origin = list(pr1_file_add_code_map.keys())
+    pr2_add_files_origin = list(pr2_file_add_code_map.keys())
+    pr1_delete_files_origin = list(pr1_file_delete_code_map.keys())
+    pr2_delete_files_origin = list(pr2_file_delete_code_map.keys())
+
+    pr1_add_files = filterNonCodeFile(pr1_add_files_origin)
+    pr2_add_files = filterNonCodeFile(pr2_add_files_origin)
+    pr1_delete_files = filterNonCodeFile(pr1_delete_files_origin)
+    pr2_delete_files = filterNonCodeFile(pr2_delete_files_origin)
+
 
     pr1_add_sameFileName_list, pr2_add_sameFileName_list, overlap_add_FilePath_List, pr1_add_fileNameList, pr2_add_fileNameList = getOverlapFiles(
         pr1_add_files, pr2_add_files)

@@ -44,6 +44,7 @@ else:
     model_dir = currentDIR + '/NLPmodel/'
 pr_date_difference_inDays= 2
 comparePRs_timeWindow_inDays= 365
+FilterOutNonCodeFile_flag = True
 
 # print('monitored_repoList_filePath:' + monitored_repoList_filePath)
 # print('LOCAL_DATA_PATH:' + LOCAL_DATA_PATH)
