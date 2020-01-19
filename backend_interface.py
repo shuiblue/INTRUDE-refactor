@@ -490,7 +490,7 @@ def analyzePREvents(PR_events):
 @app.route('/')
 def load_home():
     data = []
-    data_dups = top_pair_similarityBiggerThanThreshold('0.8')
+    data_dups = top_pair_similarityBiggerThanThreshold('0.9')
     return render_template(htmlpage_url, data=data, id="home", data_dups=data_dups)
 
 
