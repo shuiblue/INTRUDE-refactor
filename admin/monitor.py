@@ -192,9 +192,12 @@ def updateResult():
     print("find pr pairs similar score is higher than "+ threshold)
     idlist = top_pair_similarityBiggerThanThreshold_unMarked(threshold)
     print("send email..")
-    notify_admin(str(len(idlist)))
-    markEmailedResultToDB(idlist)
-    print("update " + str(len(idlist)) + "in database")
+    if (len(idlist)>0):
+        notify_admin(str(len(idlist)))
+        markEmailedResultToDB(idlist)
+        print("update " + str(len(idlist)) + "in database")
+    else:
+        print("no new duplicate pr found... wait...")
 
 def markEmailedResultToDB(idlist):
     sql_str =  "UPDATE duppr_pair_update set notify_admin = True where id in "+ idlist
