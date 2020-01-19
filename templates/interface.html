@@ -17,14 +17,18 @@
 <form method=POST action="{{ url_for('updatePRstate') }}">
     <button>Update PR state</button>
 </form>
-<form method=POST action="{{ url_for('DupPRPair') }}">
-    get dup PR > <input type="text" name="threshold"><br>
-    <input type="submit" value="get!">
-</form>
+
 
 <form method=POST action="{{ url_for('getPRFeatureBiggerThanDotEight') }}">
     <button>get PR pair any feature similarity > 0.8</button>
 </form>
+
+ <form method=POST action="{{ url_for('filterOverlapParticipants') }}">
+    get dup PR pair with <input type="text" name="numOverlapParticipants"> overlapping participants<br>
+     Threshold > <input type="text" name="threshold">
+    <input type="submit" value="get!">
+</form>
+
 <p>
     {#
 <p>#}

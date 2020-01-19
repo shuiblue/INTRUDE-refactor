@@ -323,13 +323,14 @@ def top_pair_featureBiggerThanDotEight():
     return data_sorted  # return the sorted list of all pairs@app.route('/top-pair')
 
 
-def top_pair_similarityBiggerThanThreshold(threshold):
+def top_pair_similarityBiggerThanThreshold_filterOverlapParticipant(threshold,numOverlapParticipants):
     sql_str = "SELECT * \
                FROM duppr_pair_update a\
                WHERE a.repo COLLATE utf8mb4_unicode_ci NOT IN  (SELECT DISTINCT b.repo FROM dupPR_repo b)\
                      AND  (score >" + threshold + ")\
                      AND (notes NOT LIKE '%FP%' OR notes NOT LIKE '%doc%' OR notes IS NULL)\
                      AND TIMESTAMPDIFF(DAY, `timestamp`, CURRENT_TIMESTAMP()) <= 2\
+                     AND num_overlapped_participants <= "+numOverlapParticipants+"\
                ORDER BY timestamp DESC;"
     cur.execute(sql_str)
     data_sorted = cur.fetchall()
@@ -338,11 +339,15 @@ def top_pair_similarityBiggerThanThreshold(threshold):
     return data_sorted  # return the sorted list of all pairs
 
 
-@app.route('/DupPRPair', methods=['POST'])
-def DupPRPair():
+
+
+@app.route('/filterOverlapParticipants', methods=['POST'])
+def filterOverlapParticipants():
+    numOverlapParticipants = request.form['numOverlapParticipants']
     threshold = request.form['threshold']
-    data_sorted = top_pair_similarityBiggerThanThreshold(threshold)
+    data_sorted = top_pair_similarityBiggerThanThreshold_filterOverlapParticipant(threshold, numOverlapParticipants)
     return render_template(htmlpage_url, id="home", data_dups=data_sorted)
+
 
 
 # Runs upon clicking 'send comment.' Edits comment_sent col in db.
@@ -491,7 +496,7 @@ def analyzePREvents(PR_events):
 @app.route('/')
 def load_home():
     data = []
-    data_dups = top_pair_similarityBiggerThanThreshold('0.9')
+    data_dups = top_pair_similarityBiggerThanThreshold_filterOverlapParticipant('0.9','0')
     return render_template(htmlpage_url, data=data, id="home", data_dups=data_dups)
 
 

@@ -215,6 +215,7 @@ def top_pair_similarityBiggerThanThreshold_unMarked(threshold):
                      AND (notes NOT LIKE '%FP%' OR notes NOT LIKE '%doc%' OR notes IS NULL)\
                      AND TIMESTAMPDIFF(DAY, `timestamp`, CURRENT_TIMESTAMP()) <= 2\
                      AND notify_admin is NULL and checked is Null\
+                     AND num_overlapped_participants = 0\
                ORDER BY timestamp DESC;"
     cur.execute(sql_str)
     data_sorted = cur.fetchall()
