@@ -227,7 +227,7 @@ def top_pair_similarityBiggerThanThreshold_unMarked(threshold):
 
     idList_str = "("+ ', '.join(map(str, idList)) +")"
     print(idList_str)
-    return idList  # return the sorted list of all pairs
+    return idList_str  # return the sorted list of all pairs
 
 
 def updatePRstate():
