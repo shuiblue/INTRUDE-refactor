@@ -190,10 +190,16 @@ def updateResult():
 
     threshold = '0.9'
     print("find pr pairs similar score is higher than "+ threshold)
-    idlist_str = top_pair_similarityBiggerThanThreshold_unMarked(threshold)
+    idlist = top_pair_similarityBiggerThanThreshold_unMarked(threshold)
+
     print("send email..")
-    if (len(idlist_str.replace('()',''))>0):
-        notify_admin(str(len(idlist_str)))
+    result_list = []
+    if (len(idlist)>0):
+        notify_admin(str(len(idlist)))
+        for id in idlist:
+            list.append(str(id[0]))
+
+        idlist_str = "(" + ', '.join(map(str, result_list)) + ")"
         markEmailedResultToDB(idlist_str)
         print("update " + str(len(idlist_str)) + "in database")
     else:
@@ -225,13 +231,8 @@ def top_pair_similarityBiggerThanThreshold_unMarked(threshold):
     conn.commit()  # save changes
     # print(str(len(data_sorted)))
 
-    idList = []
-    for id in data_sorted:
-        idList.append(str(id[0]))
 
-    idList_str = "("+ ', '.join(map(str, idList)) +")"
-    print(idList_str)
-    return idList_str  # return the sorted list of all pairs
+    return data_sorted  # return the sorted list of all pairs
 
 
 def updatePRstate():
