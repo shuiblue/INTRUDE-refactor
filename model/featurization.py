@@ -392,9 +392,15 @@ def filterNonCodeFile(file_list):
     result = []
     for file in file_list:
         print(file)
+        isNonCodeFile = False
         for extension in nonCodeFileExtensionList:
-            if not file.endswith(extension):
-                result.append(file)
+            if file.endswith(extension):
+                isNonCodeFile = True
+                print('is non code file')
+                break
+        if not isNonCodeFile:
+            print('add to list')
+            result.append(file)
     print("filted file list size : " + str(len(result)) + " origin size: " + str(len(file_list)))
     return result
 
