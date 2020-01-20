@@ -558,9 +558,9 @@ def getTime(repo, pr):
         file1.close()
     return timeStamp
 
-# if __name__ == "__main__":
-#     renew = True
-#     getFeatureVectorForModeling(renew)
+if __name__ == "__main__":
+    renew = True
+    getFileCodeMap(renew)
 
 # import a new API to create a thread pool
 
