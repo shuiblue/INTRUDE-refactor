@@ -197,7 +197,7 @@ def updateResult():
     if (len(idlist)>0):
         notify_admin(str(len(idlist)))
         for id in idlist:
-            list.append(str(id[0]))
+            result_list.append(str(id[0]))
 
         idlist_str = "(" + ', '.join(map(str, result_list)) + ")"
         markEmailedResultToDB(idlist_str)
