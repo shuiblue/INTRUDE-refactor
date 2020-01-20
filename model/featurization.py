@@ -34,8 +34,8 @@ if bigram_flag == True:
     body_file_name = '/body_bigrams_tokens_stemmed.tsv'
     commitMSG_file_name = '/commit_bigrams_tokens_stemmed.tsv'
 
+nonCodeFileExtensionList = [line.rstrip('\n') for line in open(init.currentDIR + '/data/NonCodeFile.txt')]
 
-nonCodeFileExtensionList = [line.rstrip('\n') for line in open(init.currentDIR+'/data/NonCodeFile.txt')]
 
 def get_location_similarity_map(repo, pr1, pr2, overlap_addFiles):
     pr1_locList, pr1_overlap_loc = getPRLocationList(repo, pr1, overlap_addFiles)
@@ -163,7 +163,6 @@ def getFileCodeMap(repo, pr):
                     file_del_code_map[changeFile['filename']] = changeFile[key]
 
     return file_add_code_map, file_del_code_map
-
 
 
 def getCodeSim(repo, pr1_file_code_map, pr2_file_code_map, pr1_sameFileName_list, pr2_sameFileName_list,
@@ -405,8 +404,8 @@ def filterNonCodeFile(file_list):
     return result
 
 
-
 def get_featureVector_ForPRpair(repo, pr1, pr2):
+    print(repo + ' ' + pr1 + ' ' + pr2)
     similarity_vector = []
 
     #   1.   title [lsi, tfidf]   (count = 2)
@@ -436,7 +435,6 @@ def get_featureVector_ForPRpair(repo, pr1, pr2):
     pr1_delete_files = filterNonCodeFile(pr1_delete_files_origin)
     print('filtering 4')
     pr2_delete_files = filterNonCodeFile(pr2_delete_files_origin)
-
 
     pr1_add_sameFileName_list, pr2_add_sameFileName_list, overlap_add_FilePath_List, pr1_add_fileNameList, pr2_add_fileNameList = getOverlapFiles(
         pr1_add_files, pr2_add_files)
@@ -564,14 +562,13 @@ def getTime(repo, pr):
         file1.close()
     return timeStamp
 
-
 # if __name__ == "__main__":
 #     renew = True
 #     getFeatureVectorForModeling(renew)
 
 # import a new API to create a thread pool
 
-#todo  comment out for bot
+# todo  comment out for bot
 # from concurrent.futures import ThreadPoolExecutor as PoolExecutor
 #
 #
