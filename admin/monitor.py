@@ -189,7 +189,7 @@ def updateResult():
     print('update pr states...')
     updatePRstate()
 
-    threshold = '0.9'
+    threshold = '0.8'
     print("find pr pairs similar score is higher than "+ threshold)
     prPair_list = top_pair_similarityBiggerThanThreshold_unMarked(threshold)
 
