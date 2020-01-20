@@ -401,7 +401,7 @@ def filterNonCodeFile(file_list):
         if not isNonCodeFile:
             print('add to list')
             result.append(file)
-    print("filted file list size : " + str(len(result)) + " origin size: " + str(len(file_list)))
+    print("filtered file list size : " + str(len(result)) + " origin size: " + str(len(file_list)))
     return result
 
 
@@ -428,9 +428,13 @@ def get_featureVector_ForPRpair(repo, pr1, pr2):
     pr1_delete_files_origin = list(pr1_file_delete_code_map.keys())
     pr2_delete_files_origin = list(pr2_file_delete_code_map.keys())
 
+    print('filtering 1')
     pr1_add_files = filterNonCodeFile(pr1_add_files_origin)
+    print('filtering 2')
     pr2_add_files = filterNonCodeFile(pr2_add_files_origin)
+    print('filtering 3')
     pr1_delete_files = filterNonCodeFile(pr1_delete_files_origin)
+    print('filtering 4')
     pr2_delete_files = filterNonCodeFile(pr2_delete_files_origin)
 
 
