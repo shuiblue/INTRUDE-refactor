@@ -390,22 +390,22 @@ feature vector
 def filterNonCodeFile(file_list):
     result = []
     for file in file_list:
-        print(file)
+        # print(file)
         isNonCodeFile = False
         for extension in nonCodeFileExtensionList:
             if file.endswith(extension):
                 isNonCodeFile = True
-                print('is non code file')
+                # print('is non code file')
                 break
         if not isNonCodeFile:
-            print('add to list')
+            # print('add to list')
             result.append(file)
-    print("filtered file list size : " + str(len(result)) + " origin size: " + str(len(file_list)))
+    # print("filtered file list size : " + str(len(result)) + " origin size: " + str(len(file_list)))
     return result
 
 
 def get_featureVector_ForPRpair(repo, pr1, pr2):
-    print(repo + ' ' + pr1 + ' ' + pr2)
+    # print(repo + ' ' + pr1 + ' ' + pr2)
     similarity_vector = []
 
     #   1.   title [lsi, tfidf]   (count = 2)
@@ -427,13 +427,9 @@ def get_featureVector_ForPRpair(repo, pr1, pr2):
     pr1_delete_files_origin = list(pr1_file_delete_code_map.keys())
     pr2_delete_files_origin = list(pr2_file_delete_code_map.keys())
 
-    print('filtering 1')
     pr1_add_files = filterNonCodeFile(pr1_add_files_origin)
-    print('filtering 2')
     pr2_add_files = filterNonCodeFile(pr2_add_files_origin)
-    print('filtering 3')
     pr1_delete_files = filterNonCodeFile(pr1_delete_files_origin)
-    print('filtering 4')
     pr2_delete_files = filterNonCodeFile(pr2_delete_files_origin)
 
     pr1_add_sameFileName_list, pr2_add_sameFileName_list, overlap_add_FilePath_List, pr1_add_fileNameList, pr2_add_fileNameList = getOverlapFiles(
