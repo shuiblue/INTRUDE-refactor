@@ -368,10 +368,11 @@ def analyzePREvents(PR_events):
         if 'committer' in keys:
             participant_list.append(event['committer']['name'])
         if 'actor' in keys:
-            if (event['actor'] is not None) and ('bot' not in event['actor']['login']):
+            if (event['actor'] is not None) \
+                    and ('bot' not in event['actor']['login']) and ('codecov' not in event['actor']['login']):
                 participant_list.append(event['actor']['login'])
         if 'user' in keys:
-            if (event['user'] is not None) and ('bot' not in event['user']['login']):
+            if (event['user'] is not None) and ('bot' not in event['user']['login']) and ('codecov' not in event['actor']['login']):
                 participant_list.append(event['user']['login'])
         if event['event'] == 'commented':
             comment_count += 1
