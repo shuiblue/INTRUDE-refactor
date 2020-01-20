@@ -45,7 +45,7 @@ else:
 pr_date_difference_inDays= 2
 comparePRs_timeWindow_inDays= 60
 FilterOutNonCodeFile_flag = True
-mysqlParam = "../input/mysqlParams.txt"
+mysqlParam = "./input/mysqlParams.txt"
 
 # print('monitored_repoList_filePath:' + monitored_repoList_filePath)
 # print('LOCAL_DATA_PATH:' + LOCAL_DATA_PATH)
