@@ -1,11 +1,11 @@
 import json
 import requests
-
+import init
 # Authentication info
 
-with open('./input/authParams.txt') as f:
-# with open('../input/authParams.txt') as f:
-    USERNAME, TOKEN = f.read().splitlines()
+# with open('./input/authParams.txt') as f:
+with open(init.mysqlParam) as f:
+    USERNAME, TOKEN , IP, PORT = f.read().splitlines()
 
 
 # def make_github_comment(REPO, PR_NUMBER, PR_NUMBER2, FEATURES, body=None):

@@ -13,6 +13,7 @@
 <p>
 
 
+
 <form method=POST action="{{ url_for('getPRFeatureBiggerThanDotEight') }}">
     <button>get PR pair any feature similarity > 0.8</button>
 </form>
@@ -88,6 +89,7 @@
             <th width="2%">pr1/pr2 #comments</th>
             <th width="2%">pr1/pr2 #participant</th>
             <th width="2%">#overlapped_participants</th>
+            <th width="2%">pr1_closed / pr2_closed</th>
             <!--            <th width="5%">repo</th>-->
             <!--            <th width="3%">Timestamp</th>-->
             <!--            <th width="2%">pr1</th>-->
@@ -340,6 +342,8 @@
     <td>{{ row[48],row[49] }}</td>
     <!-- pr1/pr2 overlap #participants -->
     <td>{{ row[50] }}</td>
+    <!--    pr2 closed time-->
+    <td>{{ row[53], row[54] }}</td>
 
     <!-- END FEATURE SCORE LIST -->
 </tr>

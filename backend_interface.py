@@ -36,6 +36,7 @@ import os
 import platform
 # import PRcommenter
 import github.github_api
+import init
 
 # api = scraper.GitHubAPI()
 from admin import PRcommenter
@@ -83,8 +84,8 @@ app = Flask(__name__)
 htmlpage_url = 'interface.html'
 
 # Connect to MySQL database
-with open('./input/mysqlParams.txt') as f:
-# with open('../input/mysqlParams.txt') as f:
+# with open('./input/mysqlParams.txt') as f:
+with open(init.mysqlParam) as f:
     MYSQL_USER, MYSQL_PASS, MYSQL_HOST, PORT = f.read().splitlines()
 # conn = mysql.connector.connect(user=MYSQL_USER, password=MYSQL_PASS, host=MYSQL_HOST, database='repolist', port='3306')
 conn = mysql.connector.connect(user=MYSQL_USER, password=MYSQL_PASS, host=MYSQL_HOST, database='fork', port=PORT)
@@ -361,6 +362,8 @@ def updatePRstate():
 def analyzePREvents(PR_events):
     participant_list = []
     comment_count = 0
+    isMerged = False
+    closed_at = ''
     for event in PR_events:
         keys = event.keys()
         if 'author' in keys:
@@ -372,14 +375,18 @@ def analyzePREvents(PR_events):
                     and ('bot' not in event['actor']['login']) and ('codecov' not in event['actor']['login']):
                 participant_list.append(event['actor']['login'])
         if 'user' in keys:
-            if (event['user'] is not None) and ('bot' not in event['user']['login']) and ('codecov' not in event['actor']['login']):
+            if (event['user'] is not None) and ('bot' not in event['user']['login']) and ('codecov' not in event['user']['login']):
                 participant_list.append(event['user']['login'])
         if event['event'] == 'commented':
             comment_count += 1
+        if event['event'] == 'merged':
+            isMerged = True
+        if event['event'] == 'closed':
+            closed_at = event['created_at']
     if 'GitHub' in participant_list:
         participant_list.remove('GitHub')
     # print(str(len(set(participant_list))) + " participants " + str(comment_count) + " comments")
-    return set(participant_list), comment_count
+    return set(participant_list), comment_count, isMerged, closed_at
 
 
 @app.route('/')
@@ -390,18 +397,20 @@ def load_home():
 
 
 def update_pr_state_db(repo, pr1, pr2, pr1_status, pr2_status, pr1_participant_num, pr2_participant_num,
-                       pr1_num_comments, pr2_num_comments, num_participants_overlap):
+                       pr1_num_comments, pr2_num_comments, num_participants_overlap,pr1_closed_at, pr2_closed_at):
     # sql_str = "update duppr_pair " \
     sql_str = "update duppr_pair_update " \
               "set pr1_state = %s, pr2_state = %s, " \
               "    num_pr1_participants= %s,num_pr2_participants = %s ," \
               "    num_pr1_comments = %s,num_pr2_comments = %s ," \
-              "    num_overlapped_participants = %s " \
+              "    num_overlapped_participants = %s ," \
+              "    pr1_closed_at = %s ," \
+              "    pr2_closed_at = %s " \
               "WHERE repo = %s and pr1 =%s and pr2 =%s ;"
 
     cur.execute(sql_str, (
         pr1_status, pr2_status, pr1_participant_num, pr2_participant_num, pr1_num_comments, pr2_num_comments,
-        num_participants_overlap, repo, pr1, pr2))
+        num_participants_overlap, pr1_closed_at,pr2_closed_at, repo, pr1, pr2))
     conn.commit()  # save changes
     # print("update %s pr status %s %s  %s %s " % (repo, pr1, pr2, pr1_status, pr2_status))
 
