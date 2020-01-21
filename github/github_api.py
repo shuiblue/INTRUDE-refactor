@@ -305,7 +305,12 @@ class GitHubAPI(object):
                     continue
                 elif r.status_code == 502:
                     # repository is empty https://developer.github.com/v3/git/
-                    print("443 retry..")
+                    print("502 retry..")
+                    time.sleep(randint(1, 29))
+                    continue
+                elif r.status_code == 500:
+                    # repository is empty https://developer.github.com/v3/git/
+                    print("500 retry..")
                     time.sleep(randint(1, 29))
                     continue
                 r.raise_for_status()
