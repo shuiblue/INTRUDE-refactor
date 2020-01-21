@@ -78,19 +78,21 @@ def get_topK(repo, num1, topK=10, print_progress=False, use_way='new'):
         feature_vector = {}
         cnt += 1
 
-        # if the pr is older than 1 year, ignore
-        current_pr_createdAt = pull['created_at']
-        if (util.timeUtil.days_between(now, current_pr_createdAt) > init.comparePRs_timeWindow_inDays):
-            print(str(pull['number']) + "older than " + str(init.pr_date_difference_inDays) + " days , stop")
-            break
+        # # if the pr is older than 1 year, ignore
+        # current_pr_createdAt = pull['created_at']
+        # if (util.timeUtil.days_between(now, current_pr_createdAt) > init.pr_date_difference_inDays):
+        #     print(str(pull['number']) + "older than " + str(init.pr_date_difference_inDays) + " days , stop")
+        #     break
 
         if filter_out_too_old_pull_flag:
             #             time_diff = abs((get_time(pullA["updated_at"]) - get_time(pull["updated_at"])).days)
             #  updated_at is not reliable, see example: https://github.com/jquery/jquery/pull/1002
             time_diff = abs((get_time(pullA["created_at"]) - get_time(pull["created_at"])).days)
             # print ("time diff" + str(time_diff))
-            if time_diff >= 2 * 365:  # more than 2 years
-                continue
+            if time_diff >= init.comparePRs_timeWindow_inDays:
+                print(str(pull['number']) + "older than " + str(init.comparePRs_timeWindow_inDays) + " days , stop")
+                break
+                # continue
 
         if filter_larger_number:
             if int(pull["number"]) >= int(num1):
