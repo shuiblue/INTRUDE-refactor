@@ -22,7 +22,7 @@ with open(currentDir+'/data/random_sample_select_pr.txt') as f:
     for t in f.readlines():
         r, n1 = t.split()
 
-        n2, proba = dupbot.detectTopOne.detect_one(r, n1)
+        n2, proba, feature_vector = dupbot.detectTopOne.detect_one(r, n1)
         
         with open(outfile, 'a') as outf:
             print(r, n1, n2, proba, sep='\t', file=outf)
@@ -38,8 +38,9 @@ with open(currentDir+'/data/clf/second_msr_pairs.txt') as f:
         r, pr1, pr2 = t.split()
         
         n1 = str(max(int(pr1), int(pr2)))
-        
-        n2, proba = dupbot.detectTopOne.detect_one(r, n1)
+
+        n2, proba, feature_vector= dupbot.detectTopOne.detect_one(r, n1)
+        # n2, proba = dupbot.detectTopOne.detect_one(r, n1)
         
         with open(outfile, 'a') as outf:
             print(r, n1, n2, proba, sep='\t', file=outf)
