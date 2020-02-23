@@ -1,8 +1,6 @@
 import dupbot.detectTopOne
 import os
 
-currentDir = os.getcwd()
-print(currentDir)
 # detect.speed_up = True
 # detect.filter_larger_number = True
 # detect.filter_out_too_old_pull_flag = True
@@ -14,33 +12,35 @@ print(currentDir)
 
 
 # For precision
-outfile = currentDir+'/evaluation/random_sample_select_pr_result.txt'
+
+
+outfile =  '../evaluation/random_sample_select_pr_result.txt'
 with open(outfile, 'w') as outf:
     pass
 
-with open(currentDir+'/data/random_sample_select_pr.txt') as f:
+with open( '../data/random_sample_select_pr.txt') as f:
     for t in f.readlines():
         r, n1 = t.split()
 
         n2, proba, feature_vector = dupbot.detectTopOne.detect_one(r, n1)
-        
+
         with open(outfile, 'a') as outf:
             print(r, n1, n2, proba, sep='\t', file=outf)
 
 
 # For Recall
-outfile = currentDir+'/evaluation/msr_second_part_result.txt'
+outfile =  '../evaluation/msr_second_part_result.txt'
 with open(outfile, 'w') as outf:
     pass
 
-with open(currentDir+'/data/clf/second_msr_pairs.txt') as f:
+with open( '../data/clf/second_msr_pairs.txt') as f:
     for t in f.readlines():
         r, pr1, pr2 = t.split()
-        
+
         n1 = str(max(int(pr1), int(pr2)))
 
         n2, proba, feature_vector= dupbot.detectTopOne.detect_one(r, n1)
         # n2, proba = dupbot.detectTopOne.detect_one(r, n1)
-        
+
         with open(outfile, 'a') as outf:
             print(r, n1, n2, proba, sep='\t', file=outf)

@@ -1,7 +1,6 @@
 
 import platform
 import os
-
 if (platform.system() == 'Windows'):
     LOCAL_DATA_PATH = 'C:\\Users\\annik\\Documents\\REUSE\\INTRUDE\\PR_data'  # backslashes are escape characters, so doubles are needed
     experiment_param_filePath = '.\\data\\test_repo_list.txt'
@@ -10,8 +9,7 @@ if (platform.system() == 'Windows'):
     dupPR_result_filePath_prefix = '.\\data\\dupPR_'
 else:
     if (platform.system() == 'Linux'):
-        # LOCAL_DATA_PATH = '/DATA/luyao' #todo  for bot
-        LOCAL_DATA_PATH = '/DATA/shurui'  # for rqs
+        LOCAL_DATA_PATH = '/DATA/luyao'
     else:
         LOCAL_DATA_PATH = '/Users/shuruiz/Work/researchProjects'
     # monitored_repoList_filePath = 'data/test_repo_list.txt'
