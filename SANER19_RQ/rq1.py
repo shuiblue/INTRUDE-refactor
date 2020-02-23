@@ -12,13 +12,14 @@ import os
 
 
 # For precision
+import os
+curDir = os.getcwd()
 
-
-outfile =  '../evaluation/random_sample_select_pr_result.txt'
+outfile =  curDir +'/evaluation/random_sample_select_pr_result.txt'
 with open(outfile, 'w') as outf:
     pass
 
-with open( '../data/random_sample_select_pr.txt') as f:
+with open(  curDir +'/data/random_sample_select_pr.txt') as f:
     for t in f.readlines():
         r, n1 = t.split()
 
@@ -29,11 +30,11 @@ with open( '../data/random_sample_select_pr.txt') as f:
 
 
 # For Recall
-outfile =  '../evaluation/msr_second_part_result.txt'
+outfile =   curDir +'/evaluation/msr_second_part_result.txt'
 with open(outfile, 'w') as outf:
     pass
 
-with open( '../data/clf/second_msr_pairs.txt') as f:
+with open(  curDir +'/data/clf/second_msr_pairs.txt') as f:
     for t in f.readlines():
         r, pr1, pr2 = t.split()
 
