@@ -65,11 +65,11 @@ def get_topK(repo, num1, topK=10, print_progress=False, use_way='new',Flag_exper
     print("get pr " + str(num1))
     pullA = git.get_pull(repo, num1)
 
-    if git.allNonCodeFiles(pullA):
-        return [], None
-
-    if filter_already_cite:
-        cite[str(pullA["number"])] = git.get_another_pull(pullA)
+    # ---------todo for bot
+    # if git.allNonCodeFiles(pullA):
+    #     return [], None
+    # if filter_already_cite:
+    #     cite[str(pullA["number"])] = git.get_another_pull(pullA)
 
     results = {}
     results_featureVector = {}
