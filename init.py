@@ -43,7 +43,7 @@ else:
         trainModelRepoList = f.read().splitlines()
     model_dir = currentDIR + '/NLPmodel/'
 pr_date_difference_inDays= 2
-comparePRs_timeWindow_inDays= 60
+comparePRs_timeWindow_inDays= 9999 #todo for bot == 60 days
 FilterOutNonCodeFile_flag = True
 mysqlParam = "./input/mysqlParams.txt"
 
