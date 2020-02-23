@@ -1,5 +1,8 @@
 import dupbot.detectTopOne
+import os
 
+currentDir = os.getcwd()
+print(currentDir)
 # detect.speed_up = True
 # detect.filter_larger_number = True
 # detect.filter_out_too_old_pull_flag = True
@@ -11,11 +14,11 @@ import dupbot.detectTopOne
 
 
 # For precision
-outfile = '/Users/shuruiz/Work/INTRUDE-refactor/evaluation/random_sample_select_pr_result.txt'
+outfile = currentDir+'/evaluation/random_sample_select_pr_result.txt'
 with open(outfile, 'w') as outf:
     pass
 
-with open('/Users/shuruiz/Work/INTRUDE-refactor/data/random_sample_select_pr.txt') as f:
+with open(currentDir+'/data/random_sample_select_pr.txt') as f:
     for t in f.readlines():
         r, n1 = t.split()
 
@@ -26,11 +29,11 @@ with open('/Users/shuruiz/Work/INTRUDE-refactor/data/random_sample_select_pr.txt
 
 
 # For Recall
-outfile = '/Users/shuruiz/Work/INTRUDE-refactor/evaluation/msr_second_part_result.txt'
+outfile = currentDir+'/evaluation/msr_second_part_result.txt'
 with open(outfile, 'w') as outf:
     pass
 
-with open('/Users/shuruiz/Work/INTRUDE-refactor/data/clf/second_msr_pairs.txt') as f:
+with open(currentDir+'/data/clf/second_msr_pairs.txt') as f:
     for t in f.readlines():
         r, pr1, pr2 = t.split()
         
