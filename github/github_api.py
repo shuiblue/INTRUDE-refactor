@@ -940,6 +940,17 @@ def get_repo_PRlist(repo, type, renew):
     localfile.write_to_file(save_path, ret)
     return ret
 
+def get_repo_info_forPR_experiment(repo, type, renew):
+    filtered_result = []
+    api = GitHubAPI()
+    print(init.local_pr_data_dir + repo + '/pull_list.json')
+    save_path = LOCAL_DATA_PATH + '/pr_data/' + repo + '/pull_list.json'
+
+    if (os.path.exists(save_path)) and (not renew):
+        try:
+            return localfile.get_file(save_path)
+        except:
+            pass
 
 def get_repo_info_forPR(repo, type, renew):
     filtered_result = []

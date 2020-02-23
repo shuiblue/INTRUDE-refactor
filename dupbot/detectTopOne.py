@@ -44,7 +44,7 @@ def have_commit_overlap(p1, p2):
 
 
 # returns similarity score and feature vector
-def get_topK(repo, num1, topK=10, print_progress=False, use_way='new'):
+def get_topK(repo, num1, topK=10, print_progress=False, use_way='new',Flag_experient = False):
     now = datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
     global last_detect_repo
     # import model
@@ -54,7 +54,11 @@ def get_topK(repo, num1, topK=10, print_progress=False, use_way='new'):
         calculateNLPmodel.initNLPModel_per_repo(repo)
         # init_model_with_repo(repo)
 
-    pulls = github_api.get_repo_info_forPR(repo, 'pull', renew=False)
+    if not Flag_experient:
+        pulls = github_api.get_repo_info_forPR(repo, 'pull', renew=False)
+    else:
+        print("experient ... ")
+        pulls = github_api.get_repo_info_forPR_experiment(repo, 'pull', renew=False)
     print("get all " + str(len(pulls)) + "  prs for repo " + repo)
 
     print("get pr " + str(num1))
@@ -187,12 +191,12 @@ def run_list(repo, renew=False, run_num=200, rerun=False):
             print(repo, num1, ':', topk, file=outf)
 
 
-def detect_one(repo, num):
+def detect_one(repo, num,Flag_experient):
     print('analyzing ', repo, num)
     speed_up = True
     filter_create_after_merge = True
 
-    ret, feature_vector = get_topK(repo, num, 1, True)
+    ret, feature_vector = get_topK(repo, num, 1, True,Flag_experient)
     if len(ret) < 1:
         print("no result")
         return -1, -1, -1
