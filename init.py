@@ -10,7 +10,8 @@ if (platform.system() == 'Windows'):
     dupPR_result_filePath_prefix = '.\\data\\dupPR_'
 else:
     if (platform.system() == 'Linux'):
-        LOCAL_DATA_PATH = '/DATA/luyao'
+        # LOCAL_DATA_PATH = '/DATA/luyao' #todo  for bot
+        LOCAL_DATA_PATH = '/DATA/shurui'  # for rqs
     else:
         LOCAL_DATA_PATH = '/Users/shuruiz/Work/researchProjects'
     # monitored_repoList_filePath = 'data/test_repo_list.txt'
