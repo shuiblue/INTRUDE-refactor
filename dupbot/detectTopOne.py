@@ -70,6 +70,8 @@ def get_topK(repo, num1, topK=10, print_progress=False, use_way='new',Flag_exper
     #     return [], None
     # if filter_already_cite:
     #     cite[str(pullA["number"])] = git.get_another_pull(pullA)
+    # ---------todo for bot
+
 
     results = {}
     results_featureVector = {}
@@ -82,6 +84,10 @@ def get_topK(repo, num1, topK=10, print_progress=False, use_way='new',Flag_exper
     for pull in pulls:
         feature_vector = {}
         cnt += 1
+        if(pullA['number'] <= pull['number']):
+            continue
+        if (util.timeUtil.days_between(pullA['created_at'],pull['created_at'])>=365):
+            break
 
         # # if the pr is older than 1 year, ignore
         # current_pr_createdAt = pull['created_at']
@@ -89,45 +95,45 @@ def get_topK(repo, num1, topK=10, print_progress=False, use_way='new',Flag_exper
         #     print(str(pull['number']) + "older than " + str(init.pr_date_difference_inDays) + " days , stop")
         #     break
 
-        if filter_out_too_old_pull_flag:
-            #             time_diff = abs((get_time(pullA["updated_at"]) - get_time(pull["updated_at"])).days)
-            #  updated_at is not reliable, see example: https://github.com/jquery/jquery/pull/1002
-            time_diff = abs((get_time(pullA["created_at"]) - get_time(pull["created_at"])).days)
-            # print ("time diff" + str(time_diff))
-            if time_diff >= init.comparePRs_timeWindow_inDays:
-                print(str(pull['number']) + "older than " + str(init.comparePRs_timeWindow_inDays) + " days , stop")
-                break
-                # continue
-
-        if filter_larger_number:
-            if int(pull["number"]) >= int(num1):
-                continue
-
-        if filter_same_author_and_already_mentioned:
-            # same author
-            if pull["user"]["id"] == pullA["user"]["id"]:
-                continue
-
-            # case of following up work (not sure)
-            if str(pull["number"]) in (git.get_pr_and_issue_numbers(pullA["title"]) + \
-                                       git.get_pr_and_issue_numbers(pullA["body"])):
-                continue
+        # if filter_out_too_old_pull_flag:
+        #     #             time_diff = abs((get_time(pullA["updated_at"]) - get_time(pull["updated_at"])).days)
+        #     #  updated_at is not reliable, see example: https://github.com/jquery/jquery/pull/1002
+        #     time_diff = abs((get_time(pullA["created_at"]) - get_time(pull["created_at"])).days)
+        #     # print ("time diff" + str(time_diff))
+        #     if time_diff >= init.comparePRs_timeWindow_inDays:
+        #         print(str(pull['number']) + "older than " + str(init.comparePRs_timeWindow_inDays) + " days , stop")
+        #         break
+        #         # continue
+        #
+        # if filter_larger_number:
+        #     if int(pull["number"]) >= int(num1):
+        #         continue
+        #
+        # if filter_same_author_and_already_mentioned:
+        #     # same author
+        #     if pull["user"]["id"] == pullA["user"]["id"]:
+        #         continue
+        #
+        #     # case of following up work (not sure)
+        #     if str(pull["number"]) in (git.get_pr_and_issue_numbers(pullA["title"]) + \
+        #                                git.get_pr_and_issue_numbers(pullA["body"])):
+        #         continue
 
         # load events of both PRs, check if one referenced the other
         # EX: https://github.com/akinnae/curly-train/pull/1
         # cross-reference check
-        if filter_already_cite:
-            # "cite" cases
-            if (str(pull["number"]) in cite.get(str(pullA["number"]), [])) or \
-                    (str(pullA["number"]) in cite.get(str(pull["number"]), [])):
-                continue
-
-        if filter_create_after_merge:
-            # create after another is merged
-            if (pull["merged_at"] is not None) and \
-                    (get_time(pull["merged_at"]) < get_time(pullA["created_at"])) and \
-                    ((get_time(pullA["created_at"]) - get_time(pull["merged_at"])).days >= 14):
-                continue
+        # if filter_already_cite:
+        #     # "cite" cases
+        #     if (str(pull["number"]) in cite.get(str(pullA["number"]), [])) or \
+        #             (str(pullA["number"]) in cite.get(str(pull["number"]), [])):
+        #         continue
+        #
+        # if filter_create_after_merge:
+        #     # create after another is merged
+        #     if (pull["merged_at"] is not None) and \
+        #             (get_time(pull["merged_at"]) < get_time(pullA["created_at"])) and \
+        #             ((get_time(pullA["created_at"]) - get_time(pull["merged_at"])).days >= 14):
+        #         continue
 
 
         # if print_progress:
@@ -136,6 +142,7 @@ def get_topK(repo, num1, topK=10, print_progress=False, use_way='new',Flag_exper
         #         sys.stdout.flush()
 
         if use_way == 'new':
+            print("feature vector " ,( repo, str(pullA['number']), str(pull['number'] )))
             # feature_vector = get_pr_sim_vector(pullA, pull)
             from model import featurization
             feature_vector = featurization.get_featureVector_ForPRpair(repo, str(pullA['number']), str(pull['number']))
